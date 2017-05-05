@@ -13,8 +13,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
+import PageObjects.HomePagePO;
 import Utilities.FileUtilities;
-import Utilities.SeleniumFactory;
+import Utilities.SeleniumHelper;
 
 
 
@@ -23,7 +24,8 @@ public class MainSnippet
 
 	public static void main(String[] args) 
 	{
-		
+
+		new HomePagePO(SeleniumHelper.getChromeDriver()).Sell();
 	}
 	
 	
@@ -49,11 +51,11 @@ public class MainSnippet
 	static void SearchBumpUps(String idsFilename)
 	{
 		
-		WebDriver wd = SeleniumFactory.getChromeDriver();
+		WebDriver wd = SeleniumHelper.getChromeDriver();
 		
-		SeleniumFactory.SetPos(wd, 0, 0);
-		SeleniumFactory.SetSize(wd, 250, 250);
-		SeleniumFactory.SetImplicitWait(wd, 2);
+		SeleniumHelper.SetPos(wd, 0, 0);
+		SeleniumHelper.SetSize(wd, 250, 250);
+		SeleniumHelper.SetImplicitWait(wd, 2);
 		
 		String[] ids = FileUtilities.ReadAllLine(idsFilename);
 		
@@ -123,9 +125,9 @@ public class MainSnippet
 		//navegar al aviso
 		String usr, psw;
 		
-		WebDriver wd = SeleniumFactory.getChromeDriver();
+		WebDriver wd = SeleniumHelper.getChromeDriver();
 		
-		SeleniumFactory.SetSize(wd, 1280, 1024);
+		SeleniumHelper.SetSize(wd, 1280, 1024);
 		//SeleniumFactory.SetImplicitWait(wd, 5);
 		
 		ArrayList<WebDriver> navs = new ArrayList<WebDriver>();
@@ -187,8 +189,8 @@ public class MainSnippet
 			
 			ts[i] = new Thread();
 			
-			WebDriver wd = SeleniumFactory.getChromeDriver();//new ChromeDriver();
-			SeleniumFactory.SetSize(wd, 1280, 1024);
+			WebDriver wd = SeleniumHelper.getChromeDriver();//new ChromeDriver();
+			SeleniumHelper.SetSize(wd, 1280, 1024);
 			
 			usr = "user"+ id +"@mail.com";
 			psw = "pass";
@@ -243,8 +245,8 @@ public class MainSnippet
 		{
 			ts[i] = new Thread();
 			
-			WebDriver wd = SeleniumFactory.getChromeDriver();//new ChromeDriver();
-			SeleniumFactory.SetSize(wd, 1280, 1024);
+			WebDriver wd = SeleniumHelper.getChromeDriver();//new ChromeDriver();
+			SeleniumHelper.SetSize(wd, 1280, 1024);
 			
 			
 			System.out.println("I:"+ i );
