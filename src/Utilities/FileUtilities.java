@@ -3,12 +3,15 @@ package Utilities;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.util.ArrayList;
+import java.util.Properties;
 
 
 public class FileUtilities {
@@ -121,5 +124,24 @@ public class FileUtilities {
 		
 		 return ret.toArray( new String[ret.size() ]);
 		
+	}
+
+	public static Properties newPropFromFile ( String path)
+	{
+		Properties prop = new Properties();
+		try 
+		{
+			prop.load(new FileInputStream(path));
+		}catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return prop;
+	}
+
+	public static Boolean isDirectory(String path)
+	{
+		return new File(path).isDirectory();
 	}
 }

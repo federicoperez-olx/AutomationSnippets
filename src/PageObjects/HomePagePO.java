@@ -1,12 +1,14 @@
 package PageObjects;
-import java.util.List;
+
+import java.nio.file.NotDirectoryException;
+import java.util.Properties;
 import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import Utilities.FileUtilities;
 import Utilities.SeleniumHelper;
 
 
@@ -20,7 +22,9 @@ public class HomePagePO
 	//TODO: register
 	// same as login
 	
-	//vender (imposiburu)
+	// Vender
+	//	ir a la pagina de confirmacion
+	//  guardar url
 	private WebDriver wd;
 	
 	public HomePagePO(WebDriver driver)
@@ -48,17 +52,18 @@ public class HomePagePO
 		//available in all pages
 		wd.findElement(By.cssSelector("input.field.search")).sendKeys(searchTerm);
 	}
-	
+
 	public void Sell()
 	{
+		//TODO: levantar info de archivo
 		By venderLocator = By.xpath("//a[contains(.,'Vender')]");
 		SeleniumHelper.Wait5AndClick(wd, venderLocator);
 		
-		By categoryLocator = By.xpath("//a[@data-qa='category-name-859']");
+		By categoryLocator = By.xpath("//a[@data-qa='category-name-821']");
 		SeleniumHelper.WaitFor(wd, 5, categoryLocator);
 		
 		wd.findElement(categoryLocator).click();
-		wd.findElement(By.xpath("//a[@data-qa='subcategory-name-860']")).click();
+		wd.findElement(By.xpath("//a[@data-qa='subcategory-name-823']")).click();
 		
 		wd.findElement(By.id("field-title")).sendKeys("Books by Baudrillard");
 		wd.findElement(By.id("field-description")).sendKeys("I am selling a batch of books by Baudrillard, since I can't stand this postmodern asshole");
@@ -73,9 +78,49 @@ public class HomePagePO
 		
 		
 		//http://stackoverflow.com/questions/10121750/stop-the-selenium-server-until-file-uploaded
-		//SeleniumHelper.ForceWait(5);
-		//SeleniumHelper.WaitFor(wd, 25, By.className("image.fill.r1"));
-		System.out.println("a");
+
+		By locator = By.className("overlay-image");
+		SeleniumHelper.WaitFor(wd, 5, locator);
+		
+		wd.findElement(By.className("submit-form")).click();
+	}
+	
+
+	public void JobOffer(String articleFolder) throws NotDirectoryException
+	{
+		
+		if ( ! FileUtilities.isDirectory(articleFolder) )
+		{
+			throw new NotDirectoryException(articleFolder);
+		}
+		System.out.println(articleFolder);
+		
+		Properties propFile = FileUtilities.newPropFromFile( articleFolder+"data.properties" );
+		
+		String cat = propFile.getProperty("category");
+		String subCat = propFile.getProperty("sub-category");
+		String tit = propFile.getProperty("tit");
+		String desc = propFile.getProperty("desc");
+		String min = propFile.getProperty("salary_min", "100");
+		String max = propFile.getProperty("salary_max", "1000000");
+		
+		
+		By venderLocator = By.xpath("//a[contains(.,'Vender')]");
+		SeleniumHelper.Wait5AndClick(wd, venderLocator);
+		
+		By categoryLocator = By.xpath("//a[@data-qa='category-name-"+cat+"']");
+		SeleniumHelper.WaitFor(wd, 5, categoryLocator);
+		
+		wd.findElement(categoryLocator).click();
+		wd.findElement(By.xpath("//a[@data-qa='subcategory-name-"+subCat+"']")).click();
+		
+		wd.findElement(By.id("field-title")).sendKeys(tit);
+		wd.findElement(By.id("field-description")).sendKeys(desc);
+		
+		//SeleniumHelper.Wait5AndSend(wd, By.id("field-priceW"), new Random().nextInt(10000)+"" );
+		wd.findElement(By.id("field-salary_from")).sendKeys(min);
+		wd.findElement(By.id("field-salary_to")).sendKeys(max);
+		
 		wd.findElement(By.className("submit-form")).click();
 	}
 	

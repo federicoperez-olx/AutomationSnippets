@@ -25,8 +25,5 @@
     "webRequest",
     "webRequestBlocking",
     "<all_urls>"
-  ],
- "externally_connectable" : {
- "matches": ["*://olx.com*"]
-}
+  ]
 }
