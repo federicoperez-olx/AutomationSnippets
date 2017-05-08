@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebElement;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -120,26 +121,6 @@ public class SeleniumHelper
 			e.printStackTrace();
 		}
 	}
-	/*
-	
-	//http://stackoverflow.com/questions/36389649/how-can-i-pass-arguments-tochrome-extension-through-selenium-script-c
-	public static void executeScript(WebDriver wd, String script)
-	{
-		driver.ExecuteScript(@"
-			    localStorage.setItem('profiles', JSON.stringify([{
-			      title: 'Selenium', hideComment: true, appendMode: '',
-			      headers: [
-			        {enabled: true, name: 'token1', value: '01234', comment: ''},
-			        {enabled: true, name: 'token2', value: '56789', comment: ''}
-			      ],
-			      respHeaders: [],
-			      filters: []
-			    }]));");
-		JavascriptExecutor je = (JavascriptExecutor) wd;
-		
-		System.out.println(script);
-		je.executeScript(script);
-	}
 	
 	
 	public static void WaitUntilElementVisible(WebDriver wd, WebElement we, long time)
@@ -148,24 +129,4 @@ public class SeleniumHelper
 		wa.until(ExpectedConditions.visibilityOf(we));
 		
 	}
-	
-	
-	
-	private WebElement getByAttributeFromA(WebDriver wd, String data, String val)
-	{
-		List<WebElement> links = wd.findElements(By.tagName("a"));
-
-		for (int i = 0; i < links.size(); i++) 
-		{
-			WebElement e = links.get(i);
-
-			if ( e.getAttribute(data) != null )
-			{  
-				if ( e.getAttribute(data) == val ) return e;
-			}
-		}
-		return null;
-	}
-	*/
-	
 }

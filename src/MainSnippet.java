@@ -25,31 +25,15 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		//Test();
-		String path = System.getProperty("user.dir")+"/Articles/Job/";
-		new HomePagePO(SeleniumHelper.getChromeDriver()).JobOffer(path);
+		
+		String path = System.getProperty("user.dir")+"/Articles/Article01/";
+		WebDriver wd = SeleniumHelper.getChromeExtended();
+		HomePagePO home = new HomePagePO(wd);
+		home.Register("p@p.com", "p");
+		home.Sell( path );
+		
 	}
 	
-	static void Test()
-	{
-		WebDriver wd = SeleniumHelper.getChromeExtended();
-		wd.get("https://www.olx.com.ar/posting");
-		String pathImage = System.getProperty("user.dir")+"/Articles/Article01/image02.jpg";
-		System.out.println(pathImage);
-		
-		//SeleniumHelper.WaitFor(wd, 10, By.id("file0"));
-		wd.findElement(By.id("file0")).sendKeys(pathImage);
-		
-		//NO By locator = By.className("div.image.fill.r1");
-		//NO By locator = By.cssSelector("div.image.fill.r1");
-		//NO By locator = By.xpath("//div[contains(@class,'overlay-image')]");
-		By locator = By.className("overlay-image");
-		
-		SeleniumHelper.WaitFor(wd, 5, locator);
-
-
-		wd.findElement(By.className("submit-form")).click();
-	}
 	
 	static String[] GetUsrPsw(int userId)
 	{
