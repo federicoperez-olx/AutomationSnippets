@@ -63,15 +63,17 @@ modHeader.factory('dataSource', function() {
     }
 
 //DEFAULT PROFILE
+//TODO: Pick this up from a file
     var profile = {
         title: 'Default prof ' + index,
         hideComment: true,
-        headers: [{"enabled":true,"name":"x-origin-olx","value":"staging","comment":""}],
+        headers: [{"enabled":true,"name":"x-origin-olx","value":"testing","comment":""}],
         respHeaders: [],
         filters: [],
         appendMode: ''
     };
 
+     //dataSource.addHeader([{"enabled":true,"name":"x-origin-olx","value":"testing","comment":""}])
     dataSource.addHeader(profile.headers);
     return profile;
   };

@@ -14,8 +14,6 @@ import Utilities.SeleniumHelper;
 
 public class BasePO 
 {
-
-
 	protected WebDriver wd;
 	
 	public void Search(String searchTerm)
@@ -33,8 +31,9 @@ public class BasePO
 		wd.findElement(By.name("usernameOrEmail")).sendKeys(usr);
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
-		wd.findElement(By.linkText("Submit")).click();
-		
+		//wd.findElement(By.linkText("Entrar")).click();
+		wd.findElement(By.className("send")).click();
+		SeleniumHelper.ForceWait(5);
 	}
 	
 	

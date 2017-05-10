@@ -25,15 +25,24 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		
+		EnviarMsjsPublicacionRndUser();
+	}
+	
+	static void Test()
+	{
+
 		String path = System.getProperty("user.dir")+"/Articles/Article01/";
 		WebDriver wd = SeleniumHelper.getChromeExtended();
 		HomePagePO home = new HomePagePO(wd);
-		home.Register("p@p.com", "p");
+		
+		String usr = "federicop@mailinator.com";
+		String psw = "a";
+		
+		home.Register(usr, psw);
+		home.Login(usr, psw);
 		home.Sell( path );
 		
 	}
-	
 	
 	static String[] GetUsrPsw(int userId)
 	{
@@ -130,26 +139,24 @@ public class MainSnippet
 		
 		//navegar al aviso
 		String usr, psw;
-		
-		WebDriver wd = SeleniumHelper.getChromeDriver();
-		
-		SeleniumHelper.SetSize(wd, 1280, 1024);
-		//SeleniumFactory.SetImplicitWait(wd, 5);
+		WebDriver wd;
 		
 		ArrayList<WebDriver> navs = new ArrayList<WebDriver>();
-
 		
 		for (int i = 0; i < avisos.length; i++) 
 		{
 			int id = new Random().nextInt(1000000);
+
+			wd = SeleniumHelper.getChromeExtended();
+			wd.get("chrome://extensions/");
+			SeleniumHelper.SetSize(wd, 1280, 1024);
+			SeleniumHelper.SetImplicitWait(wd, 5);
 			
-			
-			wd.get(avisos[i]);
-			
-			usr = "user"+ id +"@mail.com";
+			usr = "testing-"+ id +"@mail.com";
 			psw = "pass";
 			
 			System.out.println("I:"+ i );
+			
 			wd.get( avisos[i] );
 			
 			//comentar
@@ -174,7 +181,7 @@ public class MainSnippet
 			
 			if ( i > 0 )
 				navs.get(i-1).quit();
-			if (i == avisos.length-1 )
+			if (i == avisos.length )
 				navs.get(i).quit();
 		}
 	}
