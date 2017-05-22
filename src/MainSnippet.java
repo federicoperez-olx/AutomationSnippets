@@ -10,12 +10,16 @@ import java.util.Random;
 
 import org.openqa.selenium.By;
 
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
 import PageObjects.HomePagePO;
+import PageObjects.PublishPO;
 import Utilities.FileUtilities;
+import Utilities.RandomUtilities;
 import Utilities.SeleniumHelper;
 
 
@@ -25,26 +29,69 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		EnviarMsjsPublicacionRndUser();
+		TestChat();
 	}
 	
-	static void Test()
+	static void TestChat()
+	{
+		WebDriver wd = SeleniumHelper.getChromeDriver();
+		
+		HomePagePO ho = new HomePagePO(wd);
+		
+		ho.Login("roverto@mailinator.com", " ");
+		
+		wd.findElement(By.linkText("Mis Mensajes")).click();
+		
+		By locator = By.cssSelector("input.sendMessage");
+		
+		for (int i = 0; i < 100; i++) 
+		{
+			SeleniumHelper.ForceWait(1);
+
+			String msg = RandomUtilities.GenerateString(2) +" "+ i;
+			wd.findElement(locator).sendKeys(msg);
+			wd.findElement(locator).sendKeys(Keys.ENTER);
+			
+		}
+		
+		
+	}
+	
+	static void TestRegister()
 	{
 
 		String path = System.getProperty("user.dir")+"/Articles/Article01/";
 		WebDriver wd = SeleniumHelper.getChromeExtended();
+		
 		HomePagePO home = new HomePagePO(wd);
 		
-		String usr = "federicop@mailinator.com";
-		String psw = "a";
+		PublishPO publishPage = new PublishPO(wd);
 		
-		home.Register(usr, psw);
-		home.Login(usr, psw);
-		home.Sell( path );
+		String id = RandomUtilities.GenerateString("0123456789", 2, 3);
+		
+		String usr = "asshat"+id+"@mailinator.com";
+		String psw = "asshat";
+		
+		try
+		{
+			 //wd.navigate().refresh();
+			 System.out.println("refresh");
+			
+			 home.Register(usr, psw);
+			 home.Login(usr, psw);
+			 publishPage.Sell( path );
+			 
+			FileUtilities.WriteFile("cuentas.txt", usr+"\n"+psw);
+		
+		}catch(NoSuchElementException e)
+		{
+			e.printStackTrace();
+			System.out.println("No such element exception@ "+wd.getCurrentUrl());
+		}
 		
 	}
 	
-	static String[] GetUsrPsw(int userId)
+	public static String[] GetUsrPsw(int userId)
 	{
 		Properties props = new Properties();
 		
@@ -160,7 +207,7 @@ public class MainSnippet
 			wd.get( avisos[i] );
 			
 			//comentar
-			String msg = "Auto message: "+ id + "\n\n" + generateString();
+			String msg = "Auto message: "+ id + "\n\n" + RandomUtilities.GenerateString();
 			
 			wd.findElement(By.name("message")).sendKeys(msg);
 			wd.findElement(By.className("sendmessage")).click();	
@@ -212,7 +259,7 @@ public class MainSnippet
 			wd.get( avisos[i] );
 			
 			//comentar
-			String msg = "Auto message: "+ id + "\n\n" + generateString();
+			String msg = "Auto message: "+ id + "\n\n" + RandomUtilities.GenerateString();
 			
 			wd.findElement(By.name("message")).sendKeys(msg);
 			wd.findElement(By.className("sendmessage")).click();	
@@ -238,7 +285,6 @@ public class MainSnippet
 		}
 	}
 	
-
 	static void EnviarMsjsPublicacion( )
 	{
 		
@@ -266,7 +312,7 @@ public class MainSnippet
 			wd.get( avisos[i] );
 			
 			//comentar
-			String msg = "Auto message# "+ i + "\n\n" + generateString();
+			String msg = "Auto message# "+ i + "\n\n" + RandomUtilities.GenerateString();
 			
 			wd.findElement(By.name("message")).sendKeys(msg);
 			wd.findElement(By.className("sendmessage")).click();	
@@ -297,17 +343,4 @@ public class MainSnippet
 		System.out.println(msg);
 	}
 	
-	public static String generateString()//(Random rng, String characters, int length)
-	{
-		Random rng = new Random();
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		int length = new Random().nextInt(15);
-		
-	    char[] text = new char[length];
-	    for (int i = 0; i < length; i++)
-	    {
-	        text[i] = characters.charAt(rng.nextInt(characters.length()));
-	    }
-	    return new String(text);
-	}
 }

@@ -3,6 +3,7 @@ package Utilities;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
@@ -90,7 +91,7 @@ public class SeleniumHelper
 		wd.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
 	}
 	
-	public static void WaitFor(WebDriver wd, long secs, By locator)
+	public static void WaitFor(WebDriver wd, By locator, long secs)
 	{
 		WebDriverWait ww = new WebDriverWait( wd, secs);
 		ww.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -122,11 +123,36 @@ public class SeleniumHelper
 		}
 	}
 	
+	public static void WaitUntilElementVisible(WebDriver wd, By locator, long time)
+	{
+		WebDriverWait wa = new WebDriverWait(wd, time);
+		wa.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
 	
 	public static void WaitUntilElementVisible(WebDriver wd, WebElement we, long time)
 	{
 		WebDriverWait wa = new WebDriverWait(wd, time);
 		wa.until(ExpectedConditions.visibilityOf(we));
-		
 	}
+
+	public static void WaitUntilElementClickable(WebDriver wd, By locator, long time) 
+	{
+		WebDriverWait wa = new WebDriverWait(wd, time);
+		wa.until(ExpectedConditions.elementToBeClickable(locator));		
+	}
+
+	public static boolean isPresent(WebDriver wd, By locator) 
+	{
+		try 
+		{
+			wd.findElement(locator);
+		} catch (NotFoundException e) 
+		{
+			return false;
+		}
+		return true;
+	}
+
+
+
 }
