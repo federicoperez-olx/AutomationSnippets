@@ -3,46 +3,27 @@ package Utilities;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.NotFoundException;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 
 public class SeleniumHelper 
 {
-	
-	//https://sites.google.com/a/chromium.org/chromedriver/capabilities
-	//http://stackoverflow.com/questions/10526995/can-a-site-invoke-a-browser-extension
-	public static ChromeDriver getChromeExtended( )
-	{
-		System.setProperty("webdriver.chrome.driver","deps/chromedriver");
-		
-		ChromeOptions co = new ChromeOptions();
-		//co.addExtensions(new File("deps/headers_mod.crx") );
-		
-		//modify deps/headersmod/main.js to hardcode default profile
-		//find entry point
-		//find end point
-		//paste code in-between
-		
-		co.addArguments("load-extension=deps/headersmod");
-		
-		return new ChromeDriver(co);
-	}
-	
 	
 	public static void setPathChromeDriver()
 	{
@@ -83,7 +64,7 @@ public class SeleniumHelper
 	
 	public static void SetPos(WebDriver wd, int x, int y)
 	{
-		wd.manage().window().setPosition( new Point(x, y) );
+		wd.manage().window().setPosition(new Point(x,y) );
 	}
 	
 	public static void SetImplicitWait(WebDriver wd, int time)

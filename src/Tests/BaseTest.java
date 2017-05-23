@@ -10,7 +10,8 @@ import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 
 import PageObjects.HomePagePO;
-import Utilities.SeleniumHelper;
+import Utilities.SeleniumFactory;
+
 
 public abstract class BaseTest 
 {
@@ -21,7 +22,7 @@ public abstract class BaseTest
 	public void OnTestStart()
 	{
 		//System.out.println("Test Start");
-		wd = SeleniumHelper.getChromeExtended();
+		wd = SeleniumFactory.getChromeTesting();
 		homePO = new HomePagePO(wd);
 	}
 	

@@ -2,24 +2,21 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import java.util.ArrayList;
-
 import java.util.Properties;
 import java.util.Random;
 
 import org.openqa.selenium.By;
-
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-
 import PageObjects.HomePagePO;
 import PageObjects.PublishPO;
 import Utilities.FileUtilities;
 import Utilities.RandomUtilities;
+import Utilities.SeleniumFactory;
 import Utilities.SeleniumHelper;
 
 
@@ -29,13 +26,35 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		TestChat();
+		TriggerBug();
+	}
+	
+	static void TriggerBug()
+	{
+		WebDriver wd = SeleniumFactory.getChromeTesting();
+		HomePagePO h = new HomePagePO( wd );
+		
+		h.Login("a@olx.com", "olx");
+		
+		for (int i = 0; i < 200; i++) 
+		{
+			String msg = RandomUtilities.GenerateString(10);
+			Print("Search#"+i+" -  "+ msg);
+			h.Search( msg );
+			SeleniumHelper.ForceWait(2);
+		}
+		
+		for (int i = 0; i < 100; i++) 
+		{
+			h.MyAds();
+			h.MyMessages();	
+		}		
 	}
 	
 	static void TestChat()
 	{
-		WebDriver wd = SeleniumHelper.getChromeDriver();
-		
+		WebDriver wd = SeleniumFactory.getChromeDriver();
+	
 		HomePagePO ho = new HomePagePO(wd);
 		
 		ho.Login("roverto@mailinator.com", " ");
@@ -61,7 +80,7 @@ public class MainSnippet
 	{
 
 		String path = System.getProperty("user.dir")+"/Articles/Article01/";
-		WebDriver wd = SeleniumHelper.getChromeExtended();
+		WebDriver wd = SeleniumFactory.getChromeDriver();
 		
 		HomePagePO home = new HomePagePO(wd);
 		
@@ -113,7 +132,7 @@ public class MainSnippet
 	static void SearchBumpUps(String idsFilename)
 	{
 		
-		WebDriver wd = SeleniumHelper.getChromeDriver();
+		WebDriver wd = SeleniumFactory.getChromeDriver();
 		
 		SeleniumHelper.SetPos(wd, 0, 0);
 		SeleniumHelper.SetSize(wd, 250, 250);
@@ -194,7 +213,7 @@ public class MainSnippet
 		{
 			int id = new Random().nextInt(1000000);
 
-			wd = SeleniumHelper.getChromeExtended();
+			wd = SeleniumFactory.getChromeDriver();
 			wd.get("chrome://extensions/");
 			SeleniumHelper.SetSize(wd, 1280, 1024);
 			SeleniumHelper.SetImplicitWait(wd, 5);
@@ -249,7 +268,7 @@ public class MainSnippet
 			
 			ts[i] = new Thread();
 			
-			WebDriver wd = SeleniumHelper.getChromeDriver();//new ChromeDriver();
+			WebDriver wd = SeleniumFactory.getChromeDriver();//new ChromeDriver();
 			SeleniumHelper.SetSize(wd, 1280, 1024);
 			
 			usr = "user"+ id +"@mail.com";
@@ -304,7 +323,7 @@ public class MainSnippet
 		{
 			ts[i] = new Thread();
 			
-			WebDriver wd = SeleniumHelper.getChromeDriver();//new ChromeDriver();
+			WebDriver wd = SeleniumFactory.getChromeDriver();//new ChromeDriver();
 			SeleniumHelper.SetSize(wd, 1280, 1024);
 			
 			

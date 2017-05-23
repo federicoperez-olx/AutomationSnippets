@@ -1,18 +1,11 @@
 package Tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import static org.junit.Assert.*;
-/*
-import java.util.Arrays;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-*/
-import PageObjects.HomePagePO;
-import Utilities.SeleniumHelper;
 
 //@RunWith(Parameterized.class)
 public class RegistrationTest extends BaseTest
@@ -28,6 +21,8 @@ public class RegistrationTest extends BaseTest
 		
 		assertEquals(wd.getCurrentUrl(), "https://www.olx.com.ar/register/success");
 	}
+	
+	@Before
 	@Override
 	public void OnTestStart() 
 	{
@@ -35,6 +30,7 @@ public class RegistrationTest extends BaseTest
 	}
 	
 	@After
+	@Override
 	public void OnTestFinished()
 	{
 		super.OnTestFinished();

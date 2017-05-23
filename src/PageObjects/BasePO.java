@@ -14,6 +14,7 @@ public class BasePO
 	public void Search(String searchTerm)
 	{
 		WebElement we = wd.findElement(By.cssSelector("input.field.search"));
+		we.clear();
 		we.sendKeys(searchTerm);
 		we.sendKeys(Keys.ENTER);
 	}
@@ -23,10 +24,10 @@ public class BasePO
 	{
 		wd.findElement(By.linkText("Ingresar")).click();
 		
-		wd.findElement(By.name("usernameOrEmail")).sendKeys(usr);
+		SeleniumHelper.Wait5AndSend(wd, By.name("usernameOrEmail"), usr);
+		//wd.findElement(By.name("usernameOrEmail")).sendKeys(usr);
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
-		//wd.findElement(By.linkText("Entrar")).click();
 		wd.findElement(By.className("send")).click();
 		SeleniumHelper.ForceWait(5);
 	}
@@ -42,5 +43,16 @@ public class BasePO
 		wd.findElement(By.className("send")).click();
 		
 	}
+	
+	public void MyAds()
+	{
+		wd.findElement( By.className("user")).click();
+	}
+	
+	public void MyMessages()
+	{
+		wd.findElement(By.linkText("Mis Mensajes")).click();
+	}
+	
 
 }
