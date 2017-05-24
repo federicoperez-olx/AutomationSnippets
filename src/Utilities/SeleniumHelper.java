@@ -10,53 +10,13 @@ import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
-
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-
 public class SeleniumHelper 
 {
-	
-	public static void setPathChromeDriver()
-	{
-		System.setProperty("webdriver.chrome.driver","deps/chromedriver");
-	}
-	
-	public static WebDriver getChromeDriver()
-	{
-		System.setProperty("webdriver.chrome.driver","deps/chromedriver");
-		return new ChromeDriver();
-	}
-	
-	public static WebDriver getChromeDriver(ChromeOptions co)
-	{
-		System.setProperty("webdriver.chrome.driver","deps/chromedriver");
-		return new ChromeDriver(co);
-	}
-	
-	public static WebDriver getFirefoxDriver()
-	{
-		System.setProperty("webdriver.gecko.driver","deps/geckodriver");
-		return new FirefoxDriver();
-	}
-	
-	public static WebDriver getPhantomJSDriver()
-	{
-		DesiredCapabilities desireCaps = new DesiredCapabilities();
-		desireCaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "deps/phantomjs");
-		desireCaps.setJavascriptEnabled(true);
-		
-		return new PhantomJSDriver(desireCaps);
-	}
-	
+
 	public static void SetSize(WebDriver wd, int width, int height)
 	{
 		wd.manage().window().setSize( new Dimension(width, height));
@@ -70,6 +30,20 @@ public class SeleniumHelper
 	public static void SetImplicitWait(WebDriver wd, int time)
 	{
 		wd.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
+	}
+	
+	public static long WaitCountFor(WebDriver wd, By locator, long secs)
+	{
+		long start = System.nanoTime();
+		
+		 WebDriverWait ww = new WebDriverWait( wd, secs);
+		 ww.until(ExpectedConditions.presenceOfElementLocated(locator));
+		
+		long end =  System.nanoTime();
+		
+		long elapsed = end - start;
+		//elapsed = elapsed / (10^9);
+		return elapsed;
 	}
 	
 	public static void WaitFor(WebDriver wd, By locator, long secs)

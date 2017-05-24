@@ -25,7 +25,7 @@ public class BasePO
 		wd.findElement(By.linkText("Ingresar")).click();
 		
 		SeleniumHelper.Wait5AndSend(wd, By.name("usernameOrEmail"), usr);
-		//wd.findElement(By.name("usernameOrEmail")).sendKeys(usr);
+
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
 		wd.findElement(By.className("send")).click();
@@ -37,7 +37,8 @@ public class BasePO
 	{
 		wd.findElement(By.linkText("Registrarse")).click();
 		
-		wd.findElement(By.name("email")).sendKeys(usr);
+		SeleniumHelper.Wait5AndSend(wd, By.name("email"), usr);
+		
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
 		wd.findElement(By.className("send")).click();

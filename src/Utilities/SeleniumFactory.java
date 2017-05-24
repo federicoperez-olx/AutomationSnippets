@@ -57,15 +57,15 @@ public class SeleniumFactory
 	
 	public static WebDriver getChromeTesting()
 	{
-		return getChromeHeaders("x-origin-olx", "testing");
+		return getChromeReqHeaders("x-origin-olx", "testing");
 	}
 	
 	public static WebDriver getChromeStaging()
 	{
-		return getChromeHeaders("x-origin-olx", "staging");
+		return getChromeReqHeaders("x-origin-olx", "staging");
 	}
 	
-	public static WebDriver getChromeHeaders(String header, String value) 
+	public static WebDriver getChromeReqHeaders(String header, String value) 
 	{
 		System.setProperty("webdriver.chrome.driver", chromeDriverLocation);
 		

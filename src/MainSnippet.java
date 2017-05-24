@@ -11,6 +11,9 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 
 import PageObjects.HomePagePO;
 import PageObjects.PublishPO;
@@ -29,14 +32,24 @@ public class MainSnippet
 		TriggerBug();
 	}
 	
+	
+	
 	static void TriggerBug()
 	{
-		WebDriver wd = SeleniumFactory.getChromeTesting();
+		String telltale = "googletag";
+		float avg_ads = 0;
+		float avg_msg = 0;
+		
+		WebDriver wd = SeleniumFactory.getChromeDriver();
 		HomePagePO h = new HomePagePO( wd );
 		
-		h.Login("a@olx.com", "olx");
+		String usr = "prodA@olx.com";
+		String pass = "pass";
 		
-		for (int i = 0; i < 200; i++) 
+		h.Register(usr, pass);
+		h.Login(usr, pass);
+		
+		for (int i = 0; i < 100; i++) 
 		{
 			String msg = RandomUtilities.GenerateString(10);
 			Print("Search#"+i+" -  "+ msg);
@@ -44,11 +57,49 @@ public class MainSnippet
 			SeleniumHelper.ForceWait(2);
 		}
 		
-		for (int i = 0; i < 100; i++) 
-		{
-			h.MyAds();
-			h.MyMessages();	
-		}		
+		Print("Metrics start");
+		try
+		{	
+			long durationAds = 0, durationMsgs = 0;
+			int q = 100;
+			for (int i = 0; i < q; i++) 
+			{
+				h.MyAds();
+				//wait for icons of wallet to appear
+				durationAds = SeleniumHelper.WaitCountFor(wd, By.cssSelector("div.coins"), 5);
+				
+				avg_ads += durationAds;
+				
+				Print("Iteration#" + i + ", Ad load time "+ durationAds);
+				
+				
+				h.MyMessages();
+				durationMsgs = SeleniumHelper.WaitCountFor(wd, By.cssSelector("div.icon-message"), 5);
+				//wait for icon of "Por el momento, no tenés mensajes."
+				
+				avg_msg += durationAds;
+				Print("Iteration#" + i + ", Msg load time "+ durationMsgs);
+			}
+	
+			avg_msg /= q;
+			avg_ads /= q;
+			
+			Print("Ads avg load time "+ avg_ads);
+			Print("Msg avg load time "+ avg_msg);
+		}finally{
+		
+			LogEntries logs = wd.manage().logs().get(LogType.BROWSER);
+			
+			for (LogEntry logEntry : logs) 
+			{
+				if ( logEntry.getMessage().contains(telltale) )
+				{
+					Print( logEntry.getTimestamp()+" "+logEntry.getLevel()+" "+ logEntry.getMessage() );
+				}
+			}
+		}
+		
+		
 	}
 	
 	static void TestChat()
