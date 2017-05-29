@@ -29,7 +29,7 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		TriggerBug();
+		EnviarMsjsPublicacion();
 	}
 	
 	
@@ -265,11 +265,11 @@ public class MainSnippet
 			int id = new Random().nextInt(1000000);
 
 			wd = SeleniumFactory.getChromeDriver();
-			wd.get("chrome://extensions/");
+			
 			SeleniumHelper.SetSize(wd, 1280, 1024);
 			SeleniumHelper.SetImplicitWait(wd, 5);
 			
-			usr = "testing-"+ id +"@mail.com";
+			usr = "user"+ id +"@olx.com";
 			psw = "pass";
 			
 			System.out.println("I:"+ i );
