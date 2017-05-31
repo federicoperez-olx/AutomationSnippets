@@ -29,10 +29,25 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		EnviarMsjsPublicacion();
+		TestAdsRelevantCategory();
 	}
 	
 	
+	static void TestAdsRelevantCategory()
+	{
+		String[] catKeyWords = new String[]{"carros","autos","motos","muebles",
+											"escorts","pollera","vestidos","bufanda",
+											"cd mala fama","mala fama","libro borges",
+											"power ranger"};
+		
+		for (int i = 0; i < catKeyWords.length; i++) 
+		{
+
+			WebDriver wd = SeleniumFactory.getChromeTesting();
+			HomePagePO h = new HomePagePO( wd );
+			h.Search( catKeyWords[i] );
+		}
+	}
 	
 	static void TriggerBug()
 	{
