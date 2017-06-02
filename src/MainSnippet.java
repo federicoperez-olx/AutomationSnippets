@@ -19,6 +19,7 @@ import PageObjects.HomePagePO;
 import PageObjects.PublishPO;
 import Utilities.FileUtilities;
 import Utilities.RandomUtilities;
+import Utilities.RegexUtilities;
 import Utilities.SeleniumFactory;
 import Utilities.SeleniumHelper;
 
@@ -29,24 +30,29 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		TestAdsRelevantCategory();
+		TestPublishPE();
 	}
 	
 	
-	static void TestAdsRelevantCategory()
+	static void TestPublishPE()
 	{
-		String[] catKeyWords = new String[]{"carros","autos","motos","muebles",
-											"escorts","pollera","vestidos","bufanda",
-											"cd mala fama","mala fama","libro borges",
-											"power ranger"};
+		String usr = "testPE@mailinator.com";
+		String psw = "testPE@mailinator.com";
 		
-		for (int i = 0; i < catKeyWords.length; i++) 
-		{
-
-			WebDriver wd = SeleniumFactory.getChromeTesting();
-			HomePagePO h = new HomePagePO( wd );
-			h.Search( catKeyWords[i] );
-		}
+		
+		WebDriver wd = SeleniumFactory.getChromeTesting();
+		
+		PublishPO publishPage = new PublishPO(wd);			
+		HomePagePO homePO = new HomePagePO(wd);
+		wd.navigate().to("https://www.olx.com.pe/posting");
+		
+		homePO.Login(usr, psw);
+		
+		publishPage.Sell("16", "1070", "titulo debe ser largo", RandomUtilities.GenerateString(52), "1000", RandomUtilities.GenerateRndImage(100, 100));
+		
+		String articleId = RegexUtilities.ApplyRegex(wd.getCurrentUrl(), "\\/([0-9]{1,})");
+		System.out.println( wd.getCurrentUrl() );
+		System.out.println("article id is "+articleId);
 	}
 	
 	static void TriggerBug()
@@ -123,17 +129,17 @@ public class MainSnippet
 	
 		HomePagePO ho = new HomePagePO(wd);
 		
-		ho.Login("roverto@mailinator.com", " ");
+		ho.Login("roverticulos@mailinator.com	", " ");
 		
-		wd.findElement(By.linkText("Mis Mensajes")).click();
+		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
 		
 		By locator = By.cssSelector("input.sendMessage");
 		
 		for (int i = 0; i < 100; i++) 
 		{
-			SeleniumHelper.ForceWait(1);
+			SeleniumHelper.ForceWait( 1 );
 
-			String msg = RandomUtilities.GenerateString(2) +" "+ i;
+			String msg = RandomUtilities.GenerateString(3) +" "+ i;
 			wd.findElement(locator).sendKeys(msg);
 			wd.findElement(locator).sendKeys(Keys.ENTER);
 			
