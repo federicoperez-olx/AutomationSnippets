@@ -30,25 +30,29 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		TestPublishPE();
+		//QnD_Publish("testPE@mailinator.com", "testPE@mailinator.com", "https://www.olx.com.pe/login");
+		TestChat("roverticulox@mailinator.com", "roverticulox@mailinator.com");
 	}
 	
 	
-	static void TestPublishPE()
-	{
-		String usr = "testPE@mailinator.com";
-		String psw = "testPE@mailinator.com";
-		
-		
+	static void QnD_Publish(String usr, String psw, String baseURL )
+	{		
 		WebDriver wd = SeleniumFactory.getChromeTesting();
+		
+		SeleniumHelper.SetImplicitWait(wd, 3);
 		
 		PublishPO publishPage = new PublishPO(wd);			
 		HomePagePO homePO = new HomePagePO(wd);
-		wd.navigate().to("https://www.olx.com.pe/posting");
+		wd.navigate().to(baseURL);
 		
 		homePO.Login(usr, psw);
 		
-		publishPage.Sell("16", "1070", "titulo debe ser largo", RandomUtilities.GenerateString(52), "1000", RandomUtilities.GenerateRndImage(100, 100));
+		String titulo = "El Titulo: " + RandomUtilities.GenerateString(16);
+		String desc = "Descripción: \n" + RandomUtilities.GenerateString(52);
+		String priz = RandomUtilities.GenerateInt(99999999);
+		String img = RandomUtilities.GenerateRndImage(10, 10);
+		
+		publishPage.Sell("16", "1070", titulo, desc, priz, img);
 		
 		String articleId = RegexUtilities.ApplyRegex(wd.getCurrentUrl(), "\\/([0-9]{1,})");
 		System.out.println( wd.getCurrentUrl() );
@@ -123,17 +127,19 @@ public class MainSnippet
 		
 	}
 	
-	static void TestChat()
+	static void TestChat(String usr, String psw)
 	{
 		WebDriver wd = SeleniumFactory.getChromeDriver();
 	
 		HomePagePO ho = new HomePagePO(wd);
 		
-		ho.Login("roverticulos@mailinator.com	", " ");
+		ho.Login(usr, psw);
 		
 		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
 		
 		By locator = By.cssSelector("input.sendMessage");
+		
+		SeleniumHelper.WaitFor(wd, locator, 10);
 		
 		for (int i = 0; i < 100; i++) 
 		{

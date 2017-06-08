@@ -1,9 +1,9 @@
 package Utilities;
 
-import java.io.File;
-import java.util.Random;
-import java.io.IOException;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 
 
 public class RandomUtilities 
@@ -55,6 +55,11 @@ public class RandomUtilities
 	public static String GenerateStringExt(int max)
 	{
 		return GenerateString(" \n-.,ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 1, max);
+	}
+	
+	public static String GenerateInt(int max)
+	{
+		return Integer.toString( new Random().nextInt( max + 1 ) );
 	}
 	
 	public static String GenerateRndImage(int w, int h)
