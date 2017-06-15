@@ -31,13 +31,16 @@ public class MainSnippet
 	public static void main(String[] args) throws Exception 
 	{
 		//QnD_Publish("testPE@mailinator.com", "testPE@mailinator.com", "https://www.olx.com.pe/login");
-		TestChat("roverticulox@mailinator.com", "roverticulox@mailinator.com");
+		String usr = "p39@mailinator.com";
+		String psw = "lalala";
+		String aviso = "https://capitalfederal.olx.com.ar/the-dragon-iid-946869386";
+		TestChat(usr, psw, aviso);
 	}
 	
 	
 	static void QnD_Publish(String usr, String psw, String baseURL )
 	{		
-		WebDriver wd = SeleniumFactory.getChromeTesting();
+		WebDriver wd = SeleniumFactory.getChromeDriver();
 		
 		SeleniumHelper.SetImplicitWait(wd, 3);
 		
@@ -59,81 +62,27 @@ public class MainSnippet
 		System.out.println("article id is "+articleId);
 	}
 	
-	static void TriggerBug()
-	{
-		String telltale = "googletag";
-		float avg_ads = 0;
-		float avg_msg = 0;
-		
-		WebDriver wd = SeleniumFactory.getChromeDriver();
-		HomePagePO h = new HomePagePO( wd );
-		
-		String usr = "prodA@olx.com";
-		String pass = "pass";
-		
-		h.Register(usr, pass);
-		h.Login(usr, pass);
-		
-		for (int i = 0; i < 100; i++) 
-		{
-			String msg = RandomUtilities.GenerateString(10);
-			Print("Search#"+i+" -  "+ msg);
-			h.Search( msg );
-			SeleniumHelper.ForceWait(2);
-		}
-		
-		Print("Metrics start");
-		try
-		{	
-			long durationAds = 0, durationMsgs = 0;
-			int q = 100;
-			for (int i = 0; i < q; i++) 
-			{
-				h.MyAds();
-				//wait for icons of wallet to appear
-				durationAds = SeleniumHelper.WaitCountFor(wd, By.cssSelector("div.coins"), 5);
-				
-				avg_ads += durationAds;
-				
-				Print("Iteration#" + i + ", Ad load time "+ durationAds);
-				
-				
-				h.MyMessages();
-				durationMsgs = SeleniumHelper.WaitCountFor(wd, By.cssSelector("div.icon-message"), 5);
-				//wait for icon of "Por el momento, no tenés mensajes."
-				
-				avg_msg += durationAds;
-				Print("Iteration#" + i + ", Msg load time "+ durationMsgs);
-			}
-	
-			avg_msg /= q;
-			avg_ads /= q;
-			
-			Print("Ads avg load time "+ avg_ads);
-			Print("Msg avg load time "+ avg_msg);
-		}finally{
-		
-			LogEntries logs = wd.manage().logs().get(LogType.BROWSER);
-			
-			for (LogEntry logEntry : logs) 
-			{
-				if ( logEntry.getMessage().contains(telltale) )
-				{
-					Print( logEntry.getTimestamp()+" "+logEntry.getLevel()+" "+ logEntry.getMessage() );
-				}
-			}
-		}
-		
-		
-	}
-	
-	static void TestChat(String usr, String psw)
+	static void TestChat(String usr, String psw, String url)
 	{
 		WebDriver wd = SeleniumFactory.getChromeDriver();
-	
+		
 		HomePagePO ho = new HomePagePO(wd);
 		
+		ho.Register(usr, psw);
 		ho.Login(usr, psw);
+		
+		//////// Primer mensaje
+		wd.get( url );
+		
+		String msg_inicial = "Auto message# \n" + RandomUtilities.GenerateString();
+		
+		wd.findElement(By.name("message")).sendKeys(msg_inicial);
+		wd.findElement(By.className("sendmessage")).click();
+		
+		////////
+		
+		
+		String id = RandomUtilities.GenerateString(3);
 		
 		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
 		
@@ -145,7 +94,7 @@ public class MainSnippet
 		{
 			SeleniumHelper.ForceWait( 1 );
 
-			String msg = RandomUtilities.GenerateString(3) +" "+ i;
+			String msg = id + " " + i;
 			wd.findElement(locator).sendKeys(msg);
 			wd.findElement(locator).sendKeys(Keys.ENTER);
 			
@@ -381,7 +330,7 @@ public class MainSnippet
 				navs.get(i).quit();
 		}
 	}
-	
+
 	static void EnviarMsjsPublicacion( )
 	{
 		
@@ -434,7 +383,76 @@ public class MainSnippet
 				navs.get(i).quit();
 		}
 	}
+
 	
+	
+	static void TriggerBug()
+	{
+		String telltale = "googletag";
+		float avg_ads = 0;
+		float avg_msg = 0;
+		
+		WebDriver wd = SeleniumFactory.getChromeDriver();
+		HomePagePO h = new HomePagePO( wd );
+		
+		String usr = "prodA@olx.com";
+		String pass = "pass";
+		
+		h.Register(usr, pass);
+		h.Login(usr, pass);
+		
+		for (int i = 0; i < 100; i++) 
+		{
+			String msg = RandomUtilities.GenerateString(10);
+			Print("Search#"+i+" -  "+ msg);
+			h.Search( msg );
+			SeleniumHelper.ForceWait(2);
+		}
+		
+		Print("Metrics start");
+		try
+		{	
+			long durationAds = 0, durationMsgs = 0;
+			int q = 100;
+			for (int i = 0; i < q; i++) 
+			{
+				h.MyAds();
+				//wait for icons of wallet to appear
+				durationAds = SeleniumHelper.WaitCountFor(wd, By.cssSelector("div.coins"), 5);
+				
+				avg_ads += durationAds;
+				
+				Print("Iteration#" + i + ", Ad load time "+ durationAds);
+				
+				
+				h.MyMessages();
+				durationMsgs = SeleniumHelper.WaitCountFor(wd, By.cssSelector("div.icon-message"), 5);
+				//wait for icon of "Por el momento, no tenés mensajes."
+				
+				avg_msg += durationAds;
+				Print("Iteration#" + i + ", Msg load time "+ durationMsgs);
+			}
+	
+			avg_msg /= q;
+			avg_ads /= q;
+			
+			Print("Ads avg load time "+ avg_ads);
+			Print("Msg avg load time "+ avg_msg);
+		}finally{
+		
+			LogEntries logs = wd.manage().logs().get(LogType.BROWSER);
+			
+			for (LogEntry logEntry : logs) 
+			{
+				if ( logEntry.getMessage().contains(telltale) )
+				{
+					Print( logEntry.getTimestamp()+" "+logEntry.getLevel()+" "+ logEntry.getMessage() );
+				}
+			}
+		}
+		
+		
+	}
 	public static void Print(Object msg)
 	{
 		System.out.println(msg);
