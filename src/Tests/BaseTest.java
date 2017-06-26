@@ -5,11 +5,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import olxPageObjects.HomePagePO;
+
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 
-import PageObjects.HomePagePO;
 import Utilities.SeleniumFactory;
 
 

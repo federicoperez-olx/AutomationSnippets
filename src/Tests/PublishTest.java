@@ -1,12 +1,13 @@
 package Tests;
 
+import olxPageObjects.PublishPO;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.NoSuchElementException;
 
 
-import PageObjects.PublishPO;
 import Utilities.FileUtilities;
 import Utilities.RegexUtilities;
 

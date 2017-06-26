@@ -3,8 +3,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
+
+import olxPageObjects.HomePagePO;
+import olxPageObjects.PublishPO;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -15,8 +19,8 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
-import PageObjects.HomePagePO;
-import PageObjects.PublishPO;
+import Utilities.AnukoPO;
+import Utilities.CSVReader;
 import Utilities.FileUtilities;
 import Utilities.RandomUtilities;
 import Utilities.RegexUtilities;
@@ -30,11 +34,40 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		//QnD_Publish("testPE@mailinator.com", "testPE@mailinator.com", "https://www.olx.com.pe/login");
-		String usr = "p39@mailinator.com";
-		String psw = "lalala";
-		String aviso = "https://capitalfederal.olx.com.ar/the-dragon-iid-946869386";
-		TestChat(usr, psw, aviso);
+		Log();
+	}
+	
+	
+	static void Log()
+	{
+		Properties prop = FileUtilities.newPropFromFile("config.properties");
+		String path = prop.getProperty("anukoFile");
+		String path2 = "/home/federicoperez/Downloads/prueba.csv";
+		//System.out.println( path );
+		
+		HashMap<String, String> data = CSVReader.Read( path2 );
+		
+		//AnukoPO anukill = new AnukoPO( SeleniumFactory.getChromeDriver() );
+		//anukill.Login(prop.getProperty("anukoUsr"), prop.getProperty("anukoPsw"));
+		
+        //For each key in the Hash Map we determine the actual date (current format is dd-MM-YYYY)
+        for ( String key : data.keySet() ) 
+        {
+        	String date = key;
+    		String note = data.get(key);
+    		
+    		if ( ! RegexUtilities.VerifyPattern(date, "(\\d{1,2})-(\\d{1,2})-(\\d{2})")) continue;
+    		
+    		String[] splitdDate = RegexUtilities.CaptureGroups(date, "(\\d{1,2})-(\\d{1,2})-(\\d{2})" );
+
+    		for (int i = 0; i < splitdDate.length; i++) 
+    		{
+    			System.out.println( i+" :"+ splitdDate[i] );	
+    		}
+    		
+    		
+    		//anukill.Log(date, "OLX", "QA", 8, note);
+        }
 	}
 	
 	
@@ -453,7 +486,7 @@ public class MainSnippet
 		
 		
 	}
-	public static void Print(Object msg)
+	public static void Print(Object... msg)
 	{
 		System.out.println(msg);
 	}
