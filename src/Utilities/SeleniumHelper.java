@@ -2,6 +2,7 @@ package Utilities;
 
 import java.util.concurrent.TimeUnit;
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.Dimension;
@@ -93,7 +94,8 @@ public class SeleniumHelper
 	public static void WaitUntilElementClickable(WebDriver wd, By locator, long time) 
 	{
 		WebDriverWait wa = new WebDriverWait(wd, time);
-		wa.until(ExpectedConditions.elementToBeClickable(locator));		
+		wa.until(ExpectedConditions.elementToBeClickable(locator));
+		
 	}
 
 	public static boolean isPresent(WebDriver wd, By locator) 
@@ -106,8 +108,24 @@ public class SeleniumHelper
 			return false;
 		}
 		return true;
+		
 	}
 
-
+	/*
+	// from https://stackoverflow.com/questions/6568081/selenium-how-to-wait-for-options-in-a-select-to-be-populated
+	private void waitUntilSelectOptionsPopulated(WebDriver driver, final Select select) 
+	{
+        /*new FluentWait<WebDriver>(driver)
+	        .withTimeout(60, TimeUnit.SECONDS)
+	        .pollingEvery(10, TimeUnit.MILLISECONDS)
+	        .until(new Predicate<WebDriver>() 
+	        {
+	            public boolean apply(WebDriver d) 
+	            {
+	                return (select.getOptions().size() > 1);
+	            }
+	        });          
+    }
+    */
 
 }

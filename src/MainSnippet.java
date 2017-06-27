@@ -20,13 +20,14 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
 import Utilities.AnukoPO;
+
 import Utilities.CSVReader;
 import Utilities.FileUtilities;
 import Utilities.RandomUtilities;
 import Utilities.RegexUtilities;
 import Utilities.SeleniumFactory;
 import Utilities.SeleniumHelper;
-
+import Utilities.XLSXReader;
 
 
 public class MainSnippet 
@@ -34,7 +35,9 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		Log();
+		String p = "/home/federicoperez/Downloads/Minutas Daily 2017.xlsx";
+		XLSXReader.Read(p);
+		//Log();
 	}
 	
 	
@@ -42,21 +45,31 @@ public class MainSnippet
 	{
 		Properties prop = FileUtilities.newPropFromFile("config.properties");
 		String path = prop.getProperty("anukoFile");
+		String row = prop.getProperty("anukoFilterRow");
+		String filter = prop.getProperty("anukoFilterName");
 		
-		CSVReader.SetFilter(prop.getProperty("anukoFilterRow"), prop.getProperty("anukoFilterName"));
-		
+		//TODO: 
+		// * Read the csv, filter the ones whose first element is name = anukoFilterName from property file
+		// * make sure it grabs data with new lines in the middle
+		// * parse the data and put the 'date' and 'tasks today' into map
+		CSVReader.SetFilter( row, filter );
 		HashMap<String, String> data = CSVReader.Read( path );
 		
-		AnukoPO anukill = new AnukoPO( SeleniumFactory.getChromeDriver() );
+		
+		/*WebDriver wd = SeleniumFactory.getChromeDriver();
+		wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		
+		AnukoPO anukill = new AnukoPO( wd );
 		anukill.Login( prop.getProperty("anukoUsr"), prop.getProperty("anukoPsw") );
+		*/
 		
         for ( String key : data.keySet() ) 
         {
         	String date = key;
     		String note = data.get(key);
     			
-    		//System.out.println( "On "+date+" I did:\n"+note );
-    		anukill.Log(date, "OLX", "QA", 8, note);
+    		System.out.println( "On "+date+" I did: "+note );
+    		//anukill.Log(date, "OLX", "QA", 8, note);
         }
 	}
 	

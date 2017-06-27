@@ -36,16 +36,19 @@ public class CSVReader
     	HashMap<String, String> ret = new HashMap<>();
         String line = "";
         
-        //int lineNo = 0;
+        int lineNo = 0;
         
         try ( BufferedReader br = new BufferedReader( new FileReader(path) ) ) 
         {
         	
             while ( (line = br.readLine() ) != null )
             {
-            	//lineNo++;
-            	//System.out.println(lineNo+" "+line);
+            	lineNo++;
+            	System.out.println(lineNo+" "+line);
 
+            	line.replace("\n", "");
+            	line.replaceAll("", "");
+            	
                 String[] splitLines = line.split(splitBy);
                 
                 //FILTER
@@ -58,13 +61,14 @@ public class CSVReader
                 //second row, fourth row
                 if ( splitLines.length < 4 ) continue;
                 
-                String date = splitLines[1].trim();
-                String todayNote = splitLines[3].trim();
+                String date = splitLines[1];//.trim();
+                String todayNote = splitLines[3];//.trim();
                 
                 if ( date != null && date != "" )
                 {
                 	if ( todayNote != null && todayNote != "")
                 	{
+		            	System.out.println("* Added: "+ date + " / "+todayNote );	  
                 		ret.put(date, todayNote);
                 	}
                 }

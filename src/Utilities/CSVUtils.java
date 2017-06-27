@@ -3,6 +3,7 @@ package Utilities;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,24 +11,62 @@ public class CSVUtils
 {
 
 	//gently 'promoted' from https://www.mkyong.com/java/how-to-read-and-parse-csv-file-in-java/
+	private static int filterRow = -1;
+	private static String filterKey = null;
+
+	public static void SetFilter(String row, String keyword)
+	{
+		filterRow = Integer.parseInt(row);
+		filterKey = keyword;
+	}
+	
+	public static void SetFilter(int row, String keyword)
+	{
+		filterRow = row;
+		filterKey = keyword;
+	}
+	
 	
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
 
-    public static void Read(String path)  
+
+    public static HashMap<String, String> Read(String path)
     {
 
-
+    	HashMap<String, String> ret = new HashMap<>();
+    	
         Scanner scanner;
 		try 
-		{
-			
+		{		
 			scanner = new Scanner( new File(path) );
 
 			while (scanner.hasNext()) 
 	        {
-	            List<String> line = parseLine(scanner.nextLine() );
-	            System.out.println(line);
+	            List<String> line = parseLine( scanner.nextLine() );
+	            System.out.println("-> "+line);
+            	
+	            //
+	            if ( line.size() < 4 ){ System.out.println("skipped"); continue; }
+
+            	//FILTER
+                if ( filterRow > -1 && filterKey != null)
+                {
+                	if ( ! line.get(filterRow).equals( filterKey ) ) continue;	
+                }
+                                
+                String date = line.get(1).trim();
+                String todayNote = line.get(3).trim();
+
+                if ( date != null && date != "" )
+                {
+                	if ( todayNote != null && todayNote != "")
+                	{
+		            	System.out.println("* Added: "+ date + " / "+todayNote );	                		
+                		ret.put(date, todayNote);
+                	}
+                }
+	            
 	        }
 	        
 			scanner.close();
@@ -37,7 +76,8 @@ public class CSVUtils
 
 			e.printStackTrace();
 		}
-
+		
+		return ret;
     }
 
     public static List<String> parseLine(String cvsLine) {

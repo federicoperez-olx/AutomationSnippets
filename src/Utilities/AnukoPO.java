@@ -3,7 +3,10 @@ package Utilities;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,13 +14,13 @@ public class AnukoPO
 {
 	protected WebDriver wd;
 	private String regexDate = "(\\d{1,2})-(\\d{1,2})-(\\d{2})";
-	private String homeURL = "http://190.220.6.226:50065/timetracker/login.php";
+	//private String homeURL = "http://190.220.6.226:50065/timetracker/login.php";
+	private String homeURL = "http://192.168.5.195/timetracker/login.php";
 				
 	public AnukoPO(WebDriver driver)
 	{
 		wd = driver;
 		wd.get(homeURL);
-		wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
 	
 	public void Login(String usr, String psw)
@@ -26,7 +29,6 @@ public class AnukoPO
 		wd.findElement(By.id("password")).sendKeys(psw);
 		
 		wd.findElement(By.id("btlogin")).click();
-
 	}
 	
 	
@@ -53,12 +55,13 @@ public class AnukoPO
 		wd.navigate().to("http://192.168.5.195/timetracker/mytime.php?date="+date);
 		
 		// access dropdown menu with ID 'project', select OLX (or whatevs)
-		Select projectSelect = new Select( wd.findElement( By.id("project") ) );
-		projectSelect.selectByValue(projectName);
+		Select projectSelect = new Select( wd.findElement( By.id("project") ) );		
+		//css=#myselect option[value=123]
+		projectSelect.selectByVisibleText(projectName);
 		
 		// access dropdown menu with ID 'activity', select QA (or whatevs)
 		Select activitySelect = new Select( wd.findElement( By.id("activity") ) );
-		activitySelect.selectByValue(activityName);
+		activitySelect.selectByVisibleText(activityName);
 		
         // access textbox with ID 'duration', fill with '8' (or whatevs)
 		wd.findElement(By.id("duration")).sendKeys(duration);
