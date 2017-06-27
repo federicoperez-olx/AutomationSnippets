@@ -8,7 +8,22 @@ import java.util.HashMap;
 public class CSVReader 
 {
 	//gently 'promoted' from https://www.mkyong.com/java/how-to-read-and-parse-csv-file-in-java/
+	private static int filterRow = -1;
+	private static String filterKey = null;
 
+	public static void SetFilter(String row, String keyword)
+	{
+		filterRow = Integer.parseInt(row);
+		filterKey = keyword;
+	}
+	
+	public static void SetFilter(int row, String keyword)
+	{
+		filterRow = row;
+		filterKey = keyword;
+	}
+	
+	
     public static HashMap<String, String> Read(String path) 
     {
     	return Read(path, ",");
@@ -16,24 +31,28 @@ public class CSVReader
     
     public static HashMap<String, String> Read(String path, String splitBy) 
     {
-    	System.out.println(path);
+    	//System.out.println("Attempting to read: " + path);
 
     	HashMap<String, String> ret = new HashMap<>();
         String line = "";
         
-        int lineNo = 0;
+        //int lineNo = 0;
         
         try ( BufferedReader br = new BufferedReader( new FileReader(path) ) ) 
         {
         	
             while ( (line = br.readLine() ) != null )
             {
-            	lineNo++;
+            	//lineNo++;
             	//System.out.println(lineNo+" "+line);
-            	
-        		
 
                 String[] splitLines = line.split(splitBy);
+                
+                //FILTER
+                if ( filterRow > -1 && filterKey != null)
+                {
+                	if ( ! splitLines[filterRow].equals( filterKey ) )	continue;
+                }
                 
                 //what rows go in the map?
                 //second row, fourth row
@@ -60,43 +79,7 @@ public class CSVReader
         return null;
     }
     
+    
 
-    public static HashMap<String, String> Read(String path, String splitBy, int filterRow, String filter, int dataRow) 
-    {
-    	System.out.println(path);
-
-    	HashMap<String, String> ret = new HashMap<>();
-        String line = "";
-        
-        int lineNo = 0;
-        
-        try ( BufferedReader br = new BufferedReader( new FileReader(path) ) ) 
-        {
-        	
-            while ( (line = br.readLine() ) != null )
-            {
-            	lineNo++;
-            	System.out.println(lineNo);
-
-                String[] splitLines = line.split(splitBy);
-     
-                if ( splitLines[filterRow].equals(filter) )
-                {
-                	if ( splitLines[dataRow] != null )
-                	{
-                		ret.put( splitLines[filterRow], splitLines[dataRow] );
-                	}
-                	
-                }
-            }
-            
-            return ret;
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        return null;
-    }
 
 }

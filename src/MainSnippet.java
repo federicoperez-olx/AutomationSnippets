@@ -38,35 +38,25 @@ public class MainSnippet
 	}
 	
 	
-	static void Log()
+	static void Log() throws Exception
 	{
 		Properties prop = FileUtilities.newPropFromFile("config.properties");
 		String path = prop.getProperty("anukoFile");
-		String path2 = "/home/federicoperez/Downloads/prueba.csv";
-		//System.out.println( path );
 		
-		HashMap<String, String> data = CSVReader.Read( path2 );
+		CSVReader.SetFilter(prop.getProperty("anukoFilterRow"), prop.getProperty("anukoFilterName"));
 		
-		//AnukoPO anukill = new AnukoPO( SeleniumFactory.getChromeDriver() );
-		//anukill.Login(prop.getProperty("anukoUsr"), prop.getProperty("anukoPsw"));
+		HashMap<String, String> data = CSVReader.Read( path );
 		
-        //For each key in the Hash Map we determine the actual date (current format is dd-MM-YYYY)
+		AnukoPO anukill = new AnukoPO( SeleniumFactory.getChromeDriver() );
+		anukill.Login( prop.getProperty("anukoUsr"), prop.getProperty("anukoPsw") );
+		
         for ( String key : data.keySet() ) 
         {
         	String date = key;
     		String note = data.get(key);
-    		
-    		if ( ! RegexUtilities.VerifyPattern(date, "(\\d{1,2})-(\\d{1,2})-(\\d{2})")) continue;
-    		
-    		String[] splitdDate = RegexUtilities.CaptureGroups(date, "(\\d{1,2})-(\\d{1,2})-(\\d{2})" );
-
-    		for (int i = 0; i < splitdDate.length; i++) 
-    		{
-    			System.out.println( i+" :"+ splitdDate[i] );	
-    		}
-    		
-    		
-    		//anukill.Log(date, "OLX", "QA", 8, note);
+    			
+    		//System.out.println( "On "+date+" I did:\n"+note );
+    		anukill.Log(date, "OLX", "QA", 8, note);
         }
 	}
 	
