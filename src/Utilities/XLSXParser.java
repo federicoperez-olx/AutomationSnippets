@@ -1,9 +1,9 @@
 package Utilities;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -12,17 +12,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
-public class XLSXReader 
+public class XLSXParser extends XLSXReader 
 {
-	public static void Read( String path )
+
+	public static HashMap<String, String> Parse( String path )
 	{
-		Read(path, 0);
+		return Parse(path, 0);
 	}
 
-	@SuppressWarnings("deprecation")	
-	public static void Read( String path, int sheetIndex )
+	@SuppressWarnings( { "deprecation", "resource" } )
+	public static HashMap<String, String> Parse( String path, int sheetIndex )
 	{
-	
+		HashMap<String, String> result = new HashMap<String, String>();
+		
 		FileInputStream fis = null;
 		try 
 		{
@@ -68,38 +70,35 @@ public class XLSXReader
 					
 					switch (cell.getCellType()) 
 					{ 
-						case Cell.CELL_TYPE_BLANK: 
-						 
-						break;
-						
 						case Cell.CELL_TYPE_STRING:
-	
-								int rowi = cell.getRowIndex();		
-								int coli = cell.getColumnIndex();
-								System.out.print(rowi+" "+coli); 
+		
+							int rowi = cell.getRowIndex();		
+							int coli = cell.getColumnIndex();
+							System.out.print(rowi+" "+coli); 
+						
+							System.out.print( "\t" + cell.getStringCellValue() + "\n");
 							
-								System.out.print( "\t" + cell.getStringCellValue() + "\n");
-								OnStringCell( cell.getStringCellValue() );
-							break;
+							OnStringCell( cell.getStringCellValue() );
+							
+						break;
 							
 						case Cell.CELL_TYPE_NUMERIC: 
-								System.out.println(cell.getNumericCellValue() + "\t");
-								OnNumberCell( cell.getNumericCellValue() );
-							break; 
+							System.out.println(cell.getNumericCellValue() + "\t");
+							OnNumberCell( cell.getNumericCellValue() );
+						break; 
 						
 						
 						 
 					default : 
-					} 
-				} 
-			System.out.println(""); 
-		
+				  }
+				}
 		}
-
-		//Read more: http://www.java67.com/2014/09/how-to-read-write-xlsx-file-in-java-apache-poi-example.html#ixzz4lEITS5Os
+				
+		return result;
 	}
-
-	protected static void OnCell(Cell cell){};
-	protected static void OnStringCell(String cellContents){};
-	protected static void OnNumberCell(Double cellContents){};
+	
+	protected static void OnStringCell(String cellContents)
+	{
+		
+	}
 }

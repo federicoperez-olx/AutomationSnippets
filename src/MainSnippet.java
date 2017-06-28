@@ -21,7 +21,6 @@ import org.openqa.selenium.logging.LogType;
 
 import Utilities.AnukoPO;
 
-import Utilities.CSVReader;
 import Utilities.FileUtilities;
 import Utilities.RandomUtilities;
 import Utilities.RegexUtilities;
@@ -52,9 +51,8 @@ public class MainSnippet
 		// * Read the csv, filter the ones whose first element is name = anukoFilterName from property file
 		// * make sure it grabs data with new lines in the middle
 		// * parse the data and put the 'date' and 'tasks today' into map
-		CSVReader.SetFilter( row, filter );
-		HashMap<String, String> data = CSVReader.Read( path );
 		
+		HashMap<String, String> data = null;
 		
 		/*WebDriver wd = SeleniumFactory.getChromeDriver();
 		wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
