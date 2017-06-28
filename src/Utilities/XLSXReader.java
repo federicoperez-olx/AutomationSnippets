@@ -49,25 +49,38 @@ public class XLSXReader
 		// Traversing over each row of XLSX file 
 		while (rowIterator.hasNext()) 
 		{ 
-			Row row = rowIterator.next(); 
+			Row row = rowIterator.next();
+			
+			
 			// For each row, iterate through each columns 
-			Iterator<Cell> cellIterator = row.cellIterator(); 
-				while (cellIterator.hasNext()) 
+			Iterator<Cell> colIterator = row.cellIterator();
+			
+			
+				while (colIterator.hasNext()) 
 				{ 
-					Cell cell = cellIterator.next(); 
+					Cell cell = colIterator.next(); 
+
+					int rowi = cell.getRowIndex();		
+					int coli = cell.getColumnIndex();
+					
+					System.out.println(rowi+" "+coli); 
 					
 					switch (cell.getCellType()) 
 					{ 
 						case Cell.CELL_TYPE_STRING: 
-								System.out.print(cell.getStringCellValue() + "\t"); 
+								System.out.println(cell.getStringCellValue() + "\t"); 
 							break;
 							
 						case Cell.CELL_TYPE_NUMERIC: 
-								System.out.print(cell.getNumericCellValue() + "\t"); 
+								System.out.println(cell.getNumericCellValue() + "\t"); 
 							break; 
-								
+						
+						case Cell.CELL_TYPE_BLANK: 
+							 
+						break;
+							
 						case Cell.CELL_TYPE_BOOLEAN: 
-							System.out.print(cell.getBooleanCellValue() + "\t"); 
+							//System.out.print(cell.getBooleanCellValue() + "\t");
 						break; 
 					default : 
 					} 
