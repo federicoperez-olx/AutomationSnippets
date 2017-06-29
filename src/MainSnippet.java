@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import olxPageObjects.HomePagePO;
 import olxPageObjects.PublishPO;
@@ -20,13 +21,12 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
 import Utilities.AnukoPO;
-
 import Utilities.FileUtilities;
 import Utilities.RandomUtilities;
 import Utilities.RegexUtilities;
 import Utilities.SeleniumFactory;
 import Utilities.SeleniumHelper;
-import Utilities.XLSXReader;
+import Utilities.XLSXParser;
 
 
 public class MainSnippet 
@@ -34,40 +34,45 @@ public class MainSnippet
 
 	public static void main(String[] args) throws Exception 
 	{
-		String p = "/home/federicoperez/Downloads/Minutas Daily 2017.xlsx";
-		XLSXReader.Read(p);
-		//Log();
+		Print("Start...");
+		
+		Log();
+		
+		Print("End.");
 	}
 	
 	
 	static void Log() throws Exception
 	{
 		Properties prop = FileUtilities.newPropFromFile("config.properties");
+		
 		String path = prop.getProperty("anukoFile");
-		String row = prop.getProperty("anukoFilterRow");
-		String filter = prop.getProperty("anukoFilterName");
+		String filterCol = prop.getProperty("anukoFilterCol");
+		String filterTerm = prop.getProperty("anukoFilterTerm");
 		
 		//TODO: 
 		// * Read the csv, filter the ones whose first element is name = anukoFilterName from property file
 		// * make sure it grabs data with new lines in the middle
 		// * parse the data and put the 'date' and 'tasks today' into map
 		
-		HashMap<String, String> data = null;
+		XLSXParser.SetFilter(filterCol, filterTerm);
+		HashMap<String, String> data = XLSXParser.Parse(path, 0, 1, 3);
 		
-		/*WebDriver wd = SeleniumFactory.getChromeDriver();
+		
+		WebDriver wd = SeleniumFactory.getChromeDriver();
 		wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		
 		AnukoPO anukill = new AnukoPO( wd );
 		anukill.Login( prop.getProperty("anukoUsr"), prop.getProperty("anukoPsw") );
-		*/
+		
 		
         for ( String key : data.keySet() ) 
         {
         	String date = key;
     		String note = data.get(key);
-    			
+    		if ( note.equals("") ) continue;
     		System.out.println( "On "+date+" I did: "+note );
-    		//anukill.Log(date, "OLX", "QA", 8, note);
+    		anukill.Log(date, "OLX", "QA", 8, note);
         }
 	}
 	
@@ -489,7 +494,10 @@ public class MainSnippet
 	}
 	public static void Print(Object... msg)
 	{
-		System.out.println(msg);
+		for (int i = 0; i < msg.length; i++) 
+		{
+			System.out.println( msg[i] );	
+		}
 	}
 	
 }

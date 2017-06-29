@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class AnukoPO 
 {
 	protected WebDriver wd;
-	private String regexDate = "(\\d{1,2})-(\\d{1,2})-(\\d{2})";
+	private String regexDate = "(\\d{1,2})-(\\d{1,2})-(\\d{4})";
 	//private String homeURL = "http://190.220.6.226:50065/timetracker/login.php";
 	private String homeURL = "http://192.168.5.195/timetracker/login.php";
 				
@@ -99,7 +99,7 @@ public class AnukoPO
 		String[] splitdDate = RegexUtilities.CaptureGroups(date, regexDate );
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append( splitdDate[MONTH] ).append("/").append( splitdDate[DAY] ).append("/").append("20"+splitdDate[YEAR]);
+		sb.append( splitdDate[MONTH] ).append("/").append( splitdDate[DAY] ).append("/").append( splitdDate[YEAR] );
 		
 		return sb.toString();
 	}
