@@ -3,5 +3,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="deps/selenium-server-standalone-3.4.0.jar"/>
 	<classpathentry kind="src" path="sauce"/>
+	<classpathentry kind="lib" path="deps/poi-3.16.jar"/>
+	<classpathentry kind="lib" path="deps/poi-ooxml-3.16.jar"/>
+	<classpathentry kind="lib" path="deps/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="deps/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="deps/poi-ooxml-schemas-3.16.jar"/>
+	<classpathentry kind="lib" path="deps/poi-scratchpad-3.16.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
