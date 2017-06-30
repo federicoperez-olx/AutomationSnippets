@@ -51,12 +51,12 @@ public class MainSnippet
 		
 		Properties prop = FileUtilities.newPropFromFile( rootPath + "/config.properties" );
 
-		String filepath = rootPath + "/" + prop.getProperty("anukoFileName");
+		String duration = prop.getProperty("anukoDuration");;
+		String activity = prop.getProperty("anukoActivity");
 		
-		String duration = prop.getProperty("anukoDuration");
 		String filterCol = prop.getProperty("anukoFilterCol");
 		String filterTerm = prop.getProperty("anukoFilterTerm");
-		
+		String filepath = rootPath + "/" + prop.getProperty("anukoFileName");	
 		int dateCol = Integer.parseInt( prop.getProperty("anukoDateCol") );
 		int todaysCol = Integer.parseInt( prop.getProperty("anukoTodayCol") );
 		
@@ -79,7 +79,7 @@ public class MainSnippet
     		
     		System.out.println( "On "+date+" I logged: "+note );
     		
-    		anukill.Log(date, "OLX", "QA", duration, note);
+    		anukill.Log(date, "OLX", activity, duration, note);
     		//SeleniumHelper.ForceWait(1);
         }
 	}
