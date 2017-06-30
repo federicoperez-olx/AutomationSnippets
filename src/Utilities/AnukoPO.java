@@ -3,16 +3,13 @@ package Utilities;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.concurrent.TimeUnit;
 
 public class AnukoPO 
 {
 	protected WebDriver wd;
+
 	private String regexDate = "(\\d{1,2})-(\\d{1,2})-(\\d{4})";
 	//private String homeURL = "http://190.220.6.226:50065/timetracker/login.php";
 	private String homeURL = "http://192.168.5.195/timetracker/login.php";
@@ -43,12 +40,13 @@ public class AnukoPO
 	 */
 	public void Log( String date, String projectName, String activityName, String duration, String logNote ) throws Exception
 	{
-
-		String processedDate = ParseDate( date );
+		
+		/*String processedDate = ParseDate( date );
 		if ( processedDate == null )
 		{
 			throw new Exception("Date: "+date+" invalid." );
 		}
+		*/
 		
 		//browse to the page, either by url (non-PO way) or via button press
 		// easier to navigate manually
@@ -70,7 +68,7 @@ public class AnukoPO
 		wd.findElement(By.id("note")).sendKeys( logNote );
 		
         // SUBMIT! ( click button with id 'btn_submit' )
-		//wd.findElement(By.id("btn_submit")).click();
+		wd.findElement(By.id("btn_submit")).click();
 	}
 	
 	/**
@@ -86,7 +84,7 @@ public class AnukoPO
 		Log(date, projectName, activityName, Integer.toString(duration), logNote);
 	}
 
-    //Expected date format is dd-MM-YYYY)
+
 	private String ParseDate(String date)
 	{
 		if ( ! RegexUtilities.VerifyPattern(date, regexDate)) 

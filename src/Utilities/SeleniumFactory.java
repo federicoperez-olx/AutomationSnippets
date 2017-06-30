@@ -22,31 +22,33 @@ public class SeleniumFactory
 	
 	public static void setPathChromeDriver()
 	{
-		System.setProperty("webdriver.chrome.driver",chromeDriverLocation);
+		
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
 	}
 	
 	public static WebDriver getChromeDriver()
 	{
-		System.setProperty("webdriver.chrome.driver",chromeDriverLocation);
+		
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
 		return new ChromeDriver();
 	}
 	
 	public static WebDriver getChromeDriver(ChromeOptions co)
 	{
-		System.setProperty("webdriver.chrome.driver",chromeDriverLocation);
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
 		return new ChromeDriver(co);
 	}
 	
 	public static WebDriver getFirefoxDriver()
 	{
-		System.setProperty("webdriver.gecko.driver",firefoxDriverLocation);
+		System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir")+"/"+firefoxDriverLocation);
 		return new FirefoxDriver();
 	}
 	
 	public static WebDriver getPhantomJSDriver()
 	{
 		DesiredCapabilities desireCaps = new DesiredCapabilities();
-		desireCaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "deps/phantomjs");
+		desireCaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, System.getProperty("user.dir")+"/"+"deps/phantomjs");
 		desireCaps.setJavascriptEnabled(true);
 		
 		return new PhantomJSDriver(desireCaps);
@@ -67,7 +69,7 @@ public class SeleniumFactory
 	
 	public static WebDriver getChromeReqHeaders(String header, String value) 
 	{
-		System.setProperty("webdriver.chrome.driver", chromeDriverLocation);
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
 		
 		ChromeOptions options = new ChromeOptions();
 		options.addExtensions( new File(extensionPath) );

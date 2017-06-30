@@ -1,23 +1,22 @@
 package Utilities;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
 
-import javax.swing.text.DateFormatter;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFDataValidation;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
+import java.io.FileNotFoundException;
+
+
+import Utilities.Legacy.XLSXReader;
 
 
 public class XLSXParser extends XLSXReader 
@@ -25,6 +24,9 @@ public class XLSXParser extends XLSXReader
 	private static int filterCol = -1;
 	private static String filterKey = "";
 	private static boolean filterActive = false;
+
+	private static SimpleDateFormat dformatter = new SimpleDateFormat("MM/dd/yyyy");
+	
 	
 	public static void SetFilter(String filterColIndex, String filterKeyword)
 	{
@@ -108,7 +110,7 @@ public class XLSXParser extends XLSXReader
 					String key 	= getCellAsString( row.getCell(colKey) );
 					String value = getCellAsString( row.getCell(colData) );
 					
-					System.out.println( key + " -  " + value );
+					//System.out.println( key + " -  " + value );
 					
 					result.put(key, value);
 				}
@@ -117,7 +119,7 @@ public class XLSXParser extends XLSXReader
 				String key 	= getCellAsString( row.getCell(colKey) );
 				String value = getCellAsString( row.getCell(colData) );
 				
-				System.out.println( key + " & " + value );
+				//System.out.println( key + " & " + value );
 				
 				result.put(key, value);
 			}
@@ -180,8 +182,6 @@ public class XLSXParser extends XLSXReader
 				
 		return result;
 	}
-	
-	private static SimpleDateFormat dformatter = new SimpleDateFormat("dd-MM-yyyy");
 	
 	private static String getCellAsString(Cell cell)
 	{

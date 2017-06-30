@@ -1,33 +1,36 @@
+import java.io.File;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.WebDriver;
+
+import Utilities.AnukoPO;
+import Utilities.FileUtilities;
+import Utilities.SeleniumFactory;
+import Utilities.XLSXParser;
+/*
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+
+import Utilities.RandomUtilities;
+import Utilities.RegexUtilities;
+import Utilities.SeleniumHelper;
 
 import olxPageObjects.HomePagePO;
 import olxPageObjects.PublishPO;
+import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-
-import Utilities.AnukoPO;
-import Utilities.FileUtilities;
-import Utilities.RandomUtilities;
-import Utilities.RegexUtilities;
-import Utilities.SeleniumFactory;
-import Utilities.SeleniumHelper;
-import Utilities.XLSXParser;
-
+*/
 
 public class MainSnippet 
 {
@@ -36,7 +39,7 @@ public class MainSnippet
 	{
 		Print("Start...");
 		
-		Log();
+		Log(  );
 		
 		Print("End.");
 	}
@@ -44,20 +47,21 @@ public class MainSnippet
 	
 	static void Log() throws Exception
 	{
-		Properties prop = FileUtilities.newPropFromFile("config.properties");
+		String rootPath = new File("").getAbsolutePath();
 		
-		String path = prop.getProperty("anukoFile");
+		Properties prop = FileUtilities.newPropFromFile( rootPath + "/config.properties" );
+
+		String filepath = rootPath + "/" + prop.getProperty("anukoFileName");
+		
+		String duration = prop.getProperty("anukoDuration");
 		String filterCol = prop.getProperty("anukoFilterCol");
 		String filterTerm = prop.getProperty("anukoFilterTerm");
 		
-		//TODO: 
-		// * Read the csv, filter the ones whose first element is name = anukoFilterName from property file
-		// * make sure it grabs data with new lines in the middle
-		// * parse the data and put the 'date' and 'tasks today' into map
+		int dateCol = Integer.parseInt( prop.getProperty("anukoDateCol") );
+		int todaysCol = Integer.parseInt( prop.getProperty("anukoTodayCol") );
 		
 		XLSXParser.SetFilter(filterCol, filterTerm);
-		HashMap<String, String> data = XLSXParser.Parse(path, 0, 1, 3);
-		
+		HashMap<String, String> data = XLSXParser.Parse(filepath, 0, dateCol, todaysCol);
 		
 		WebDriver wd = SeleniumFactory.getChromeDriver();
 		wd.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -70,13 +74,17 @@ public class MainSnippet
         {
         	String date = key;
     		String note = data.get(key);
+    		
     		if ( note.equals("") ) continue;
-    		System.out.println( "On "+date+" I did: "+note );
-    		anukill.Log(date, "OLX", "QA", 8, note);
+    		
+    		System.out.println( "On "+date+" I logged: "+note );
+    		
+    		anukill.Log(date, "OLX", "QA", duration, note);
+    		//SeleniumHelper.ForceWait(1);
         }
 	}
 	
-	
+	/*
 	static void QnD_Publish(String usr, String psw, String baseURL )
 	{		
 		WebDriver wd = SeleniumFactory.getChromeDriver();
@@ -246,16 +254,7 @@ public class MainSnippet
 				
 				Print ( sb.toString() );
 			}
-			/*
-			for ( int j = 0; j < infoPairs.length; j++)
-			{
-				String msg = ids[i]+": "+infoPairs[2];
-				FileUtilities.WriteFile(filename, msg );
-				
-				Print(j+" : "+ infoPairs[j] );
-				
-			}
-			*/
+
 			
 			String pMsg = i +" Progress: "+( (float) (i / (float)ids.length * 100) +"%" ); 
 			Print(pMsg);
@@ -492,6 +491,7 @@ public class MainSnippet
 		
 		
 	}
+	*/
 	public static void Print(Object... msg)
 	{
 		for (int i = 0; i < msg.length; i++) 

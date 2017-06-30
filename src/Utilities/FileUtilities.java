@@ -127,6 +127,7 @@ public class FileUtilities {
 
 	public static Properties newPropFromFile ( String path)
 	{
+		System.out.println("Opening config file at:"+path);
 		Properties prop = new Properties();
 		try 
 		{
