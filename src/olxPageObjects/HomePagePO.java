@@ -19,6 +19,12 @@ public class HomePagePO extends BasePO
 		wd.get("http://www.olx.com");
 		SeleniumHelper.WaitFor(wd, By.cssSelector("input.field.search"), 2);
 	}
+	
+	public HomePagePO(WebDriver driver, boolean hack)
+	{
+		wd = driver;
+		wd.get("http://www.olx.com.ar/login");
+	}
 
 }
 /*

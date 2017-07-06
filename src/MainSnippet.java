@@ -1,30 +1,33 @@
 import java.io.File;
-import java.util.HashMap;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 
-import Utilities.AnukoPO;
-import Utilities.FileUtilities;
 import Utilities.SeleniumFactory;
-import Utilities.XLSXParser;
-/*
-import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import Utilities.RandomUtilities;
-import Utilities.RegexUtilities;
 import Utilities.SeleniumHelper;
 
 import olxPageObjects.HomePagePO;
-import olxPageObjects.PublishPO;
-import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+/*
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import Utilities.AnukoPO;
+import Utilities.FileUtilities;
+import Utilities.XLSXParser;
+import java.io.File;
+import java.util.ArrayList;
+import Utilities.RegexUtilities;
+import olxPageObjects.PublishPO;
+import java.util.Random;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.logging.LogEntries;
@@ -39,12 +42,19 @@ public class MainSnippet
 	{
 		Print("Start...");
 		
-		Log(  );
+		String usr = GetProperty("usr");
+		String psw = GetProperty("psw");
+		String target = GetProperty("url");
+		
+		int qMsgs = Integer.parseInt( args[0] );
+		
+		TestChat( usr, psw, target, qMsgs );
+	//	Log(  );
 		
 		Print("End.");
 	}
 	
-	
+	/*
 	static void Log() throws Exception
 	{
 		String rootPath = new File("").getAbsolutePath();
@@ -83,7 +93,63 @@ public class MainSnippet
     		//SeleniumHelper.ForceWait(1);
         }
 	}
+	*/
 	
+	static void TestChat(String usr, String psw, String url, int q)
+	{
+		WebDriver wd = SeleniumFactory.getChromeDriver();
+		
+		HomePagePO ho = new HomePagePO(wd, false);
+		
+		ho.Register(usr, psw);
+		ho.Login(usr, psw);
+		
+		//////// Primer mensaje
+		wd.get( url );
+		
+		String msg_inicial = "Auto message# \n" + RandomUtilities.GenerateString();
+		
+		wd.findElement(By.name("message")).sendKeys(msg_inicial);
+		wd.findElement(By.className("sendmessage")).click();
+		
+		////////
+		
+		
+		String id = RandomUtilities.GenerateString(3);
+		
+		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
+		
+		By locator = By.cssSelector("input.sendMessage");
+		
+		SeleniumHelper.WaitFor(wd, locator, 10);
+		
+		for (int i = 1; i < q; i++) 
+		{
+			SeleniumHelper.ForceWait( 1 );
+
+			String msg = id + " " + i;
+			wd.findElement(locator).sendKeys(msg);
+			wd.findElement(locator).sendKeys(Keys.ENTER);
+			
+		}
+		
+		wd.close();
+		
+	}
+	
+	public static String GetProperty(String prop)
+	{
+		Properties props = new Properties();
+		
+		String filePath = "config.properties";
+		try {
+			props.load( new FileInputStream(new File(filePath)) ) ;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return props.getProperty(prop);
+	}
 	/*
 	static void QnD_Publish(String usr, String psw, String baseURL )
 	{		
@@ -109,46 +175,7 @@ public class MainSnippet
 		System.out.println("article id is "+articleId);
 	}
 	
-	static void TestChat(String usr, String psw, String url)
-	{
-		WebDriver wd = SeleniumFactory.getChromeDriver();
-		
-		HomePagePO ho = new HomePagePO(wd);
-		
-		ho.Register(usr, psw);
-		ho.Login(usr, psw);
-		
-		//////// Primer mensaje
-		wd.get( url );
-		
-		String msg_inicial = "Auto message# \n" + RandomUtilities.GenerateString();
-		
-		wd.findElement(By.name("message")).sendKeys(msg_inicial);
-		wd.findElement(By.className("sendmessage")).click();
-		
-		////////
-		
-		
-		String id = RandomUtilities.GenerateString(3);
-		
-		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
-		
-		By locator = By.cssSelector("input.sendMessage");
-		
-		SeleniumHelper.WaitFor(wd, locator, 10);
-		
-		for (int i = 0; i < 100; i++) 
-		{
-			SeleniumHelper.ForceWait( 1 );
-
-			String msg = id + " " + i;
-			wd.findElement(locator).sendKeys(msg);
-			wd.findElement(locator).sendKeys(Keys.ENTER);
-			
-		}
-		
-		
-	}
+	
 	
 	static void TestRegister()
 	{
@@ -182,25 +209,6 @@ public class MainSnippet
 			System.out.println("No such element exception@ "+wd.getCurrentUrl());
 		}
 		
-	}
-	
-	public static String[] GetUsrPsw(int userId)
-	{
-		Properties props = new Properties();
-		
-		String filePath = "config.properties";
-		try {
-			props.load( new FileInputStream(new File(filePath)) ) ;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		String usr = props.getProperty("usr"+userId);
-		String psw = props.getProperty("psw"+userId);
-		
-		String[] data = new String[]{ usr, psw };
-		
-		return data;
 	}
 	
 	static void SearchBumpUps(String idsFilename)
