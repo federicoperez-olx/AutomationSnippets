@@ -72,7 +72,15 @@ public class SeleniumFactory
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
 		
 		ChromeOptions options = new ChromeOptions();
+		
+		//load custom profile
+		String profilePath = "/home/federicoperez/Documents/WebProfiles/";
+		options.addArguments("user-data--dir=" + profilePath);
+		//System.out.println("loading profile from: "+profilePath);
+		
+		//load extension
 		options.addExtensions( new File(extensionPath) );
+		//System.out.println("loading extension from: "+extensionPath);
 		
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability(ChromeOptions.CAPABILITY, options);

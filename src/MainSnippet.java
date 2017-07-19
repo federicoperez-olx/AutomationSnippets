@@ -1,21 +1,22 @@
 import java.io.File;
-import java.util.Properties;
-
-import org.openqa.selenium.WebDriver;
-
-import Utilities.SeleniumFactory;
-
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
-import Utilities.RandomUtilities;
-import Utilities.SeleniumHelper;
-
+import olxPageObjects.BasePO;
 import olxPageObjects.HomePagePO;
+import olxPageObjects.PublishPO;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-/*
+import org.openqa.selenium.WebDriver;
+
+import Tests.ChatTest;
+import Utilities.FileUtilities;
+import Utilities.RandomUtilities;
+import Utilities.SeleniumFactory;
+import Utilities.SeleniumHelper;
+
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -24,16 +25,12 @@ import Utilities.FileUtilities;
 import Utilities.XLSXParser;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 import Utilities.RegexUtilities;
 import olxPageObjects.PublishPO;
-import java.util.Random;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
-*/
+import org.openqa.selenium.NoSuchElementException;
 
 public class MainSnippet 
 {
@@ -42,18 +39,121 @@ public class MainSnippet
 	{
 		Print("Start...");
 		
-		String usr = GetProperty("usr");
-		String psw = GetProperty("psw");
-		String target = GetProperty("url");
+		//SeleniumFactory.getChromeTesting().navigate().to("http://www.theguardian.com");
+		QnD_TestChat();
 		
-		int qMsgs = Integer.parseInt( args[0] );
 		
-		TestChat( usr, psw, target, qMsgs );
-	//	Log(  );
-		
+		//QnD_Publish(args[0], args[1], Integer.parseInt(args[2]));
 		Print("End.");
 	}
 	
+	static void QnD_TestChat()
+	{
+		//fyck it
+		
+		ChatTest t = new ChatTest();
+		t.OnTestStart();
+		String usr = "";
+		String tgt = "https://lima-lima.olx.com.pe/mate-7-iid-856553659";
+		
+		for (int i = 0; i < 10; i++) 
+		{
+			usr = "usr"+i+"@olx.com";
+			t.TestChat(usr, "password", tgt);
+		}
+		
+		
+	}
+	
+	
+	static void QnD_Register(String usr, String psw)
+	{
+		WebDriver wd = SeleniumFactory.getChromeTesting();
+		
+		HomePagePO home = new HomePagePO(wd);
+		
+		try
+		{
+			 //wd.navigate().refresh();
+			 System.out.println("refresh");
+			
+			 home.Register(usr, psw);
+			 home.Login(usr, psw);
+			 
+			FileUtilities.WriteFile("cuentas.txt", usr+"\n"+psw);
+		
+		}catch(NoSuchElementException e)
+		{
+			e.printStackTrace();
+			System.out.println("No such element exception@ "+wd.getCurrentUrl());
+		}
+		
+	}
+	
+	static void QnD_Publish(String usr, String psw, int qAds )
+	{		
+		WebDriver wd = SeleniumFactory.getChromeTesting();
+		SeleniumHelper.SetPos(wd, 0,  0);
+		SeleniumHelper.SetImplicitWait(wd, 10);
+		
+		PublishPO publishPage = new PublishPO(wd);
+		
+		String domain = "ar";
+		
+		//registrarse
+		wd.navigate().to("https://www.olx.com."+domain+"/register");	//wd.findElement(By.linkText("Registrarse")).click();
+
+		SeleniumHelper.Wait5AndSend(wd, By.name("email"), usr);		
+		wd.findElement(By.name("password")).sendKeys(psw);
+		wd.findElement(By.className("send")).click();
+		
+		
+		wd.navigate().to("https://www.olx.com."+domain+"/login");	//wd.findElement(By.linkText("Ingresar")).click();
+		SeleniumHelper.Wait5AndSend(wd, By.name("usernameOrEmail"), usr);
+		wd.findElement(By.name("password")).sendKeys(psw);
+		wd.findElement(By.className("send")).click();
+		
+		SeleniumHelper.ForceWait(5);
+		//wd.navigate().to("https://www.olx.com."+domain+"/posting");
+		
+		for (int i = 0; i < qAds; i++) 
+		{
+			String titulo = i +" - "+ RandomUtilities.GenerateString(10);
+			String desc = "Descripción: \n" + RandomUtilities.GenerateString(152);
+			String priz = RandomUtilities.GenerateInt(999999);
+			String img = RandomUtilities.GenerateRndImage(10, 10);
+
+			if ( i % 2 == 0 )
+			{
+				publishPage.Sell("853", "855", titulo, desc, priz, img);
+			}else if ( i % 3 == 0 ){
+				publishPage.Sell("811", "814", titulo, desc, priz, img);
+			}else{
+				publishPage.Sell("362", "377", titulo, desc, priz, img);	
+			}
+
+			SeleniumHelper.ForceWait(5);
+			
+			String articleId = RegexUtilities.ApplyRegex(wd.getCurrentUrl(), "\\/([0-9]{9}?)");
+			System.out.println( wd.getCurrentUrl() );
+			System.out.println("article id is "+articleId);	
+		}	
+	}
+	
+	public static String GetProperty(String prop)
+	{
+		Properties props = new Properties();
+		
+		String filePath = "config.properties";
+		try {
+			props.load( new FileInputStream( new File(filePath) ) ) ;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return props.getProperty(prop);
+	}
+
 	/*
 	static void Log() throws Exception
 	{
@@ -95,122 +195,7 @@ public class MainSnippet
 	}
 	*/
 	
-	static void TestChat(String usr, String psw, String url, int q)
-	{
-		WebDriver wd = SeleniumFactory.getChromeDriver();
-		
-		HomePagePO ho = new HomePagePO(wd, false);
-		
-		ho.Register(usr, psw);
-		ho.Login(usr, psw);
-		
-		//////// Primer mensaje
-		wd.get( url );
-		
-		String msg_inicial = "Auto message# \n" + RandomUtilities.GenerateString();
-		
-		wd.findElement(By.name("message")).sendKeys(msg_inicial);
-		wd.findElement(By.className("sendmessage")).click();
-		
-		////////
-		
-		
-		String id = RandomUtilities.GenerateString(3);
-		
-		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
-		
-		By locator = By.cssSelector("input.sendMessage");
-		
-		SeleniumHelper.WaitFor(wd, locator, 10);
-		
-		for (int i = 1; i < q; i++) 
-		{
-			SeleniumHelper.ForceWait( 1 );
-
-			String msg = id + " " + i;
-			wd.findElement(locator).sendKeys(msg);
-			wd.findElement(locator).sendKeys(Keys.ENTER);
-			
-		}
-		
-		wd.close();
-		
-	}
-	
-	public static String GetProperty(String prop)
-	{
-		Properties props = new Properties();
-		
-		String filePath = "config.properties";
-		try {
-			props.load( new FileInputStream(new File(filePath)) ) ;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return props.getProperty(prop);
-	}
 	/*
-	static void QnD_Publish(String usr, String psw, String baseURL )
-	{		
-		WebDriver wd = SeleniumFactory.getChromeDriver();
-		
-		SeleniumHelper.SetImplicitWait(wd, 3);
-		
-		PublishPO publishPage = new PublishPO(wd);			
-		HomePagePO homePO = new HomePagePO(wd);
-		wd.navigate().to(baseURL);
-		
-		homePO.Login(usr, psw);
-		
-		String titulo = "El Titulo: " + RandomUtilities.GenerateString(16);
-		String desc = "Descripción: \n" + RandomUtilities.GenerateString(52);
-		String priz = RandomUtilities.GenerateInt(99999999);
-		String img = RandomUtilities.GenerateRndImage(10, 10);
-		
-		publishPage.Sell("16", "1070", titulo, desc, priz, img);
-		
-		String articleId = RegexUtilities.ApplyRegex(wd.getCurrentUrl(), "\\/([0-9]{1,})");
-		System.out.println( wd.getCurrentUrl() );
-		System.out.println("article id is "+articleId);
-	}
-	
-	
-	
-	static void TestRegister()
-	{
-
-		String path = System.getProperty("user.dir")+"/Articles/Article01/";
-		WebDriver wd = SeleniumFactory.getChromeDriver();
-		
-		HomePagePO home = new HomePagePO(wd);
-		
-		PublishPO publishPage = new PublishPO(wd);
-		
-		String id = RandomUtilities.GenerateString("0123456789", 2, 3);
-		
-		String usr = "asshat"+id+"@mailinator.com";
-		String psw = "asshat";
-		
-		try
-		{
-			 //wd.navigate().refresh();
-			 System.out.println("refresh");
-			
-			 home.Register(usr, psw);
-			 home.Login(usr, psw);
-			 publishPage.Sell( path );
-			 
-			FileUtilities.WriteFile("cuentas.txt", usr+"\n"+psw);
-		
-		}catch(NoSuchElementException e)
-		{
-			e.printStackTrace();
-			System.out.println("No such element exception@ "+wd.getCurrentUrl());
-		}
-		
-	}
-	
 	static void SearchBumpUps(String idsFilename)
 	{
 		
@@ -500,6 +485,59 @@ public class MainSnippet
 		
 	}
 	*/
+	
+	static void TestChat(String usr, String psw, String url, int q)
+	{
+		/*
+		String usr = GetProperty("usr");
+		String psw = GetProperty("psw");
+		String target = GetProperty("url");
+		
+		int qMsgs = Integer.parseInt( args[0] );
+		
+		TestChat( usr, psw, target, qMsgs );
+		*/
+		
+		WebDriver wd = SeleniumFactory.getChromeDriver();
+		
+		HomePagePO ho = new HomePagePO(wd);
+		
+		ho.Register(usr, psw);
+		ho.Login(usr, psw);
+		
+		//////// Primer mensaje
+		wd.get( url );
+		
+		String msg_inicial = "Auto message# \n" + RandomUtilities.GenerateString();
+		
+		wd.findElement(By.name("message")).sendKeys(msg_inicial);
+		wd.findElement(By.className("sendmessage")).click();
+		
+		////////
+		
+		
+		String id = RandomUtilities.GenerateString(3);
+		
+		SeleniumHelper.Wait5AndClick(wd, By.linkText("Mis Mensajes"));
+		
+		By locator = By.cssSelector("input.sendMessage");
+		
+		SeleniumHelper.WaitFor(wd, locator, 10);
+		
+		for (int i = 1; i < q; i++) 
+		{
+			SeleniumHelper.ForceWait( 1 );
+
+			String msg = id + " " + i;
+			wd.findElement(locator).sendKeys(msg);
+			wd.findElement(locator).sendKeys(Keys.ENTER);
+
+		}
+		
+		wd.close();
+		
+	}
+	
 	public static void Print(Object... msg)
 	{
 		for (int i = 0; i < msg.length; i++) 

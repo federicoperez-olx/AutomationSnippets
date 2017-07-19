@@ -11,6 +11,11 @@ public class BasePO
 {
 	protected WebDriver wd;
 	
+	public void OverrideDriver(WebDriver driver )
+	{
+		wd = driver;
+	}
+	
 	public void Search(String searchTerm)
 	{
 		WebElement we = wd.findElement(By.cssSelector("input.field.search"));
@@ -22,16 +27,22 @@ public class BasePO
 
 	public void Login(String usr, String psw)
 	{
-		wd.findElement(By.linkText("Ingresar")).click();
+		SeleniumHelper.Wait5AndClick(wd, By.linkText("Ingresar"));
+		//wd.findElement(By.linkText("Ingresar")).click();
 		
 		SeleniumHelper.Wait5AndSend(wd, By.name("usernameOrEmail"), usr);
 
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
 		wd.findElement(By.className("send")).click();
-		SeleniumHelper.ForceWait(5);
+		
+		SeleniumHelper.ForceWait(2);
 	}
 	
+	public void Logout()
+	{
+		wd.navigate().to("https://www.olx.com.ar/logout");
+	}
 	
 	public void Register(String usr, String psw)
 	{

@@ -14,7 +14,7 @@ import Utilities.RegexUtilities;
 
 public class PublishTest extends BaseTest 
 {
-	private String path;
+	private String articlePath;
 	private PublishPO publishPage;
 	private String usr = "", psw = "";
 	
@@ -23,7 +23,7 @@ public class PublishTest extends BaseTest
 	public void OnTestStart()
 	{
 		super.OnTestStart();
-		path = System.getProperty("user.dir")+"/Articles/Article02/";
+		articlePath = System.getProperty("user.dir")+"/Articles/Auto1/";
 		
 		String[] data = GetUsrPsw(4);
 		usr = data[0];
@@ -40,7 +40,8 @@ public class PublishTest extends BaseTest
 			
 			homePO.Register(usr, psw);
 			homePO.Login(usr, psw);
-			publishPage.SellRnd( );
+			//publishPage.SellRnd( );
+			publishPage.Sell(articlePath);
 			 
 			//https://www.olx.com.ar/posting/success/856455871?sk=00a58a095cde6064eb0cae4b43f4f58ee
 			 
@@ -60,7 +61,6 @@ public class PublishTest extends BaseTest
 
 	
 	@After
-
 	@Override
 	public void OnTestFinished()
 	{

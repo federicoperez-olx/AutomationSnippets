@@ -24,6 +24,7 @@ public abstract class BaseTest
 	{
 		//System.out.println("Test Start");
 		wd = SeleniumFactory.getChromeTesting();
+		
 		homePO = new HomePagePO(wd);
 	}
 	
