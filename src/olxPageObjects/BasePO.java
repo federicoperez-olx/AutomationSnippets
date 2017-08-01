@@ -22,6 +22,8 @@ public class BasePO
 		we.clear();
 		we.sendKeys(searchTerm);
 		we.sendKeys(Keys.ENTER);
+
+		System.out.println("Searching for "+searchTerm);
 	}
 	
 
@@ -35,13 +37,22 @@ public class BasePO
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
 		wd.findElement(By.className("send")).click();
+
+		System.out.println("Logged in as " + usr);
 		
 		SeleniumHelper.ForceWait(2);
 	}
 	
 	public void Logout()
 	{
-		wd.navigate().to("https://www.olx.com.ar/logout");
+		if ( ! SeleniumHelper.isPresent(wd, By.linkText("Ingresar") ) )
+		{
+			//TODO: REGEX to get domain chars and construct proper url (necesary?)
+			wd.navigate().to("https://www.olx.com.ar/logout");
+			
+			System.out.println("Logged out");	
+		}
+		
 	}
 	
 	public void Register(String usr, String psw)
@@ -53,7 +64,8 @@ public class BasePO
 		wd.findElement(By.name("password")).sendKeys(psw);
 		
 		wd.findElement(By.className("send")).click();
-		
+
+		System.out.println("Registered as " + usr);
 	}
 	
 	public void MyAds()

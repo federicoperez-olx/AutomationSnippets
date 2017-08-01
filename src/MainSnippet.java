@@ -1,68 +1,118 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import olxPageObjects.BasePO;
+import olxPageObjects.ArticlePO;
 import olxPageObjects.HomePagePO;
 import olxPageObjects.PublishPO;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-
-import Tests.ChatTest;
-import Utilities.FileUtilities;
-import Utilities.RandomUtilities;
-import Utilities.SeleniumFactory;
-import Utilities.SeleniumHelper;
-
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import Utilities.AnukoPO;
 import Utilities.FileUtilities;
-import Utilities.XLSXParser;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
+import Utilities.RandomUtilities;
 import Utilities.RegexUtilities;
-import olxPageObjects.PublishPO;
-
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
+import Utilities.SeleniumFactory;
+import Utilities.SeleniumHelper;
+import Utilities.XLSXParser;
 
 public class MainSnippet 
 {
 
 	public static void main(String[] args) throws Exception 
 	{
-		Print("Start...");
+		Print("Mission Start!");
+
+		//QnD_TestChat();
 		
-		//SeleniumFactory.getChromeTesting().navigate().to("http://www.theguardian.com");
-		QnD_TestChat();
-		
-		
-		//QnD_Publish(args[0], args[1], Integer.parseInt(args[2]));
-		Print("End.");
+		Print("Mission End.");
 	}
+	
+	
 	
 	static void QnD_TestChat()
 	{
+
+		String usr, filename, logMsg;
+		String tgt = GetProperty("target");
+		int cadence = Integer.parseInt( GetProperty("delay") ) ;
+		
 		//fyck it
+		WebDriver wd = SeleniumFactory.getChromeProfiled() ;
+
+		SeleniumHelper.SetPos(wd, 0, 0);
+		SeleniumHelper.SetSize(wd, 1200, 600);
 		
-		ChatTest t = new ChatTest();
-		t.OnTestStart();
-		String usr = "";
-		String tgt = "https://lima-lima.olx.com.pe/mate-7-iid-856553659";
+		HomePagePO homePO = new HomePagePO( wd );
+		ArticlePO articlePO = new ArticlePO(wd);
 		
-		for (int i = 0; i < 10; i++) 
+		//last user prefs	
+		int i = Integer.parseInt( GetPropertyFrom("lastUsr.properties", "lastUsr") );
+		FileUtilities.DeleteFile("lastUsr.properties");
+		
+		while( true ) //for (int i = 0; i < 50; i++)
 		{
-			usr = "usr"+i+"@olx.com";
-			t.TestChat(usr, "password", tgt);
-		}
-		
-		
+			
+			filename = "log" + new SimpleDateFormat("dd-MM-yyyy").format( Calendar.getInstance().getTime() ) + ".txt";
+			
+			usr = "usr"+i+"x@olx.com";
+			homePO.Logout();
+			
+			logMsg = "Start: " + LocalNow();
+			FileUtilities.WriteFile(filename, logMsg );
+			Print(logMsg);
+			
+			homePO.Register(usr, "password");
+			homePO.Login(usr, "password");
+			FileUtilities.WriteFile(filename, "Logged in as>"+usr );
+			
+			wd.navigate().to(tgt);
+			FileUtilities.WriteFile(filename, "Navigated to target." );
+			
+			String message = "Hi! it's " + usr + " @" + LocalNow()+".";
+			articlePO.SendMessage(message);
+			
+			Print("Sent message.");
+			FileUtilities.WriteFile(filename, "Message sent>" + message );
+
+			try
+			{
+				//"Tu mensaje ha sido enviado"
+				SeleniumHelper.WaitFor(wd, By.cssSelector("div.success.icons-material.icon-material-ok"), 5);
+			}catch(TimeoutException te)
+			{
+				logMsg = "Timed out exception. Refreshing and waiting additional 5 seconds.";
+				Print(logMsg);
+				FileUtilities.WriteFile(filename, logMsg );
+				
+				SeleniumHelper.Refresh(wd);
+
+				SeleniumHelper.ForceWait(5);
+			}finally
+			{
+				//last usr prfs
+				FileUtilities.WriteFile("lastusr.properties", "lastUsr="+i );
+			}
+			
+			homePO.Logout();
+			FileUtilities.WriteFile(filename, "Logged out." );
+			
+			SeleniumHelper.ForceWait( cadence );
+			i++;
+			
+		}	
+	
 	}
 	
 	
@@ -154,7 +204,20 @@ public class MainSnippet
 		return props.getProperty(prop);
 	}
 
-	/*
+	public static String GetPropertyFrom(String filePath, String prop)
+	{
+		Properties props = new Properties();
+		
+		try {
+			props.load( new FileInputStream( new File(filePath) ) ) ;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return props.getProperty(prop);
+	}
+
+	
 	static void Log() throws Exception
 	{
 		String rootPath = new File("").getAbsolutePath();
@@ -183,7 +246,7 @@ public class MainSnippet
         for ( String key : data.keySet() ) 
         {
         	String date = key;
-    		String note = data.get(key);
+    		String note = data.get( key );
     		
     		if ( note.equals("") ) continue;
     		
@@ -193,7 +256,6 @@ public class MainSnippet
     		//SeleniumHelper.ForceWait(1);
         }
 	}
-	*/
 	
 	/*
 	static void SearchBumpUps(String idsFilename)
@@ -546,4 +608,13 @@ public class MainSnippet
 		}
 	}
 	
+	public static String LocalNow()
+	{
+		return Instant.now().atZone( ZoneOffset.systemDefault() ).toString();
+	}
+	
+	public static String UTCNow()
+	{
+		return Instant.now().toString();
+	}
 }

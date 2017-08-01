@@ -39,26 +39,11 @@ public class ChatTest extends BaseTest
 	}
 	
 	
-	public void TestChat(String usr, String psw, String target) //just send message
-	{
-		// Login as rnd usr x
-		homePO.Register(usr, psw);
-		homePO.Login(usr, psw);
-		
-		// Initiate conversation with STRING X
-		wd.navigate().to(target);
-		
-		String message = "Hi! it's "+usr;
-		articlePO.SendMessage(message);
-
-		//write message to file?
-		//read file lines and assert all lines are present in chat conversations?
-	}
-	
 	@After
 	@Override
 	public void OnTestFinished()
 	{
+		homePO.Logout();
 		super.OnTestFinished();
 	}
 	

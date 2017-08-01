@@ -1,0 +1,20 @@
+2017/08/01-17:46:27.141 5949 Reusing MANIFEST /home/federicoperez/workspace/AutoSnippets/deps/profile/Default/Local Extension Settings/cfhdojbkjhnklbpkdaibdccddilifddb/MANIFEST-000001
+2017/08/01-17:46:27.142 5949 Recovering log #282
+2017/08/01-17:46:27.142 5949 Reusing old log /home/federicoperez/workspace/AutoSnippets/deps/profile/Default/Local Extension Settings/cfhdojbkjhnklbpkdaibdccddilifddb/000282.log 
+2017/08/01-17:47:29.066 6152 Level-0 table #286: started
+2017/08/01-17:47:29.213 6152 Level-0 table #286: 2609845 bytes OK
+2017/08/01-17:47:29.290 6152 Delete type=0 #282
+2017/08/01-17:47:42.421 6152 Level-0 table #288: started
+2017/08/01-17:47:42.603 6152 Level-0 table #288: 2609499 bytes OK
+2017/08/01-17:47:42.804 6152 Delete type=0 #285
+2017/08/01-17:47:42.806 6152 Compacting 4@0 + 2@1 files
+2017/08/01-17:47:43.028 6152 Generated table #289@0: 2 keys, 2609376 bytes
+2017/08/01-17:47:43.072 6152 Generated table #290@0: 3 keys, 392 bytes
+2017/08/01-17:47:43.072 6152 Compacted 4@0 + 2@1 files => 2609768 bytes
+2017/08/01-17:47:43.170 6152 compacted to: files[ 0 5 3 0 0 0 0 ]
+2017/08/01-17:47:43.171 6152 Delete type=2 #278
+2017/08/01-17:47:43.171 6152 Delete type=2 #281
+2017/08/01-17:47:43.172 6152 Delete type=2 #286
+2017/08/01-17:47:43.172 6152 Delete type=2 #283
+2017/08/01-17:47:43.173 6152 Delete type=2 #277
+2017/08/01-17:47:43.207 6152 Delete type=2 #288

@@ -17,7 +17,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SeleniumHelper 
 {
-
+	public static void Refresh(WebDriver wd)
+	{
+		wd.navigate().refresh();
+	}
+	
 	public static void SetSize(WebDriver wd, int width, int height)
 	{
 		wd.manage().window().setSize( new Dimension(width, height));

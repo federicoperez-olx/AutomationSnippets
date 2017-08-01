@@ -20,6 +20,10 @@ public class SeleniumFactory
 	private static String chromeDriverLocation = "deps/chromedriver";
 	private static String firefoxDriverLocation = "deps/geckodriver";
 	
+	private static String extensionPath = "deps/modifyheaders.crx";
+	private static String profilePath = "deps/profile";
+	
+	
 	public static void setPathChromeDriver()
 	{
 		
@@ -54,9 +58,6 @@ public class SeleniumFactory
 		return new PhantomJSDriver(desireCaps);
 	}
 
-	
-	private static String extensionPath = "deps/modifyheaders.crx";
-	
 	public static WebDriver getChromeTesting()
 	{
 		return getChromeReqHeaders("x-origin-olx", "testing");
@@ -67,16 +68,25 @@ public class SeleniumFactory
 		return getChromeReqHeaders("x-origin-olx", "staging");
 	}
 	
-	public static WebDriver getChromeReqHeaders(String header, String value) 
+	public static WebDriver getChromeProfiled()
 	{
 		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
 		
 		ChromeOptions options = new ChromeOptions();
 		
-		//load custom profile
-		String profilePath = "/home/federicoperez/Documents/WebProfiles/";
-		options.addArguments("user-data--dir=" + profilePath);
-		//System.out.println("loading profile from: "+profilePath);
+		options.addArguments("--user-data-dir=" + profilePath);
+		System.out.println("loading /Default profile from: "+profilePath);
+		
+		//options.addExtensions( new File(extensionPath) );
+		
+		return new ChromeDriver(options);
+	}
+	
+	public static WebDriver getChromeReqHeaders(String header, String value) 
+	{
+		System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/"+chromeDriverLocation);
+		
+		ChromeOptions options = new ChromeOptions();
 		
 		//load extension
 		options.addExtensions( new File(extensionPath) );
@@ -104,5 +114,5 @@ public class SeleniumFactory
 		wd.findElement(By.xpath("//button[@tooltip='Enable']")).click();
 		
 		return wd;
-	}	
+	}
 }

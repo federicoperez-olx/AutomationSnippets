@@ -11,16 +11,20 @@ public class RegexUtilities
 	
 	public static String ApplyRegex(String base, String regex)
 	{
+
+		System.out.println( "Regexing..." );
 		return ApplyRegex(base, regex, 1);
 	}
 	
 	public static String ApplyRegex(String base, String regex, int captureGroup)
 	{
-		if ( base.matches(regex) )
+		//System.out.println( "Regex " + regex + " on " + base );
+		
+		Pattern pat = Pattern.compile(regex);
+		Matcher mat = pat.matcher(base);
+				
+		if ( mat.find() )
 		{
-			Pattern pat = Pattern.compile(regex);
-			Matcher mat = pat.matcher(base);
-
 			return mat.group(captureGroup);
 			//base.replaceFirst(pat, "$1");
 		}

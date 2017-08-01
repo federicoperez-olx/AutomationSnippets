@@ -83,6 +83,8 @@ public class PublishPO extends BasePO
 		String subCat = propFile.getProperty("sub-category");
 		String title = propFile.getProperty("tit", "Title description should be >10 chars");
 		String description = propFile.getProperty("desc", RandomUtilities.GenerateString(140) );
+
+		
 		String price = propFile.getProperty("price", ""+new Random().nextInt(10000) );
 		String pathImg = articleFolder + propFile.getProperty("image01", "image01.jpg");
 		

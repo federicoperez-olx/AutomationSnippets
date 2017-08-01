@@ -11,8 +11,9 @@ public class AnukoPO
 	protected WebDriver wd;
 
 	private String regexDate = "(\\d{1,2})-(\\d{1,2})-(\\d{4})";
-	//private String homeURL = "http://190.220.6.226:50065/timetracker/login.php";
-	private String homeURL = "http://192.168.5.195/timetracker/login.php";
+	private String homeURL = "http://190.220.6.226:50065/timetracker/login.php";
+	private String baseURL = "http://192.168.5.195";
+	//private String homeURL = "http://192.168.5.195/timetracker/login.php";
 				
 	public AnukoPO(WebDriver driver)
 	{
@@ -50,10 +51,12 @@ public class AnukoPO
 		
 		//browse to the page, either by url (non-PO way) or via button press
 		// easier to navigate manually
-		wd.navigate().to("http://192.168.5.195/timetracker/mytime.php?date="+date);
+		System.out.println( baseURL + "/timetracker/mytime.php?date=" + date );
+		wd.navigate().to(baseURL + "/timetracker/mytime.php?date=" + date);
 		
 		// access dropdown menu with ID 'project', select OLX (or whatevs)
-		Select projectSelect = new Select( wd.findElement( By.id("project") ) );		
+		Select projectSelect = new Select( wd.findElement( By.id("project") ) );
+		
 		//css=#myselect option[value=123]
 		projectSelect.selectByVisibleText(projectName);
 		

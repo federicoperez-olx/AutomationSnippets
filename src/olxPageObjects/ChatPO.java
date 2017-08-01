@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
-public class ChatPO extends HomePagePO
+public class ChatPO extends BasePO
 {
 	//https://www.olx.com.ar/myolx/chat
 
@@ -12,7 +12,7 @@ public class ChatPO extends HomePagePO
 	
 	public ChatPO(WebDriver driver) 
 	{
-		super(driver);
+		wd = driver;
 	}
 	
 	public void GoToMyMessages()

@@ -48,7 +48,7 @@ public class FileUtilities {
 
 			bw.write(data+"\n");
 
-			System.out.println("Done");
+			//System.out.println("Done writing file.");
 
 		} catch (IOException e) {
 
@@ -144,4 +144,11 @@ public class FileUtilities {
 	{
 		return new File(path).isDirectory();
 	}
+
+	public static void DeleteFile(String path) 
+	{
+		new File(path).delete();
+		System.out.println("File at "+path+" deleted");
+	}
+
 }

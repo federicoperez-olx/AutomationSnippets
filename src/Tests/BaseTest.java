@@ -23,7 +23,10 @@ public abstract class BaseTest
 	public void OnTestStart()
 	{
 		//System.out.println("Test Start");
-		wd = SeleniumFactory.getChromeTesting();
+			
+		wd = SeleniumFactory.getChromeProfiled();
+		//wd = SeleniumFactory.getChromeTesting();
+		wd.manage().deleteAllCookies();
 		
 		homePO = new HomePagePO(wd);
 	}
@@ -32,6 +35,8 @@ public abstract class BaseTest
 	public void OnTestFinished()
 	{
 		//System.out.println("Test End");
+
+		homePO.Logout();
 		wd.close();
 	}
 	

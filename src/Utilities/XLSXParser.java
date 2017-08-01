@@ -107,8 +107,8 @@ public class XLSXParser extends XLSXReader
 				
 				if ( row.getCell(filterCol).getStringCellValue().equals( filterKey ) )
 				{
-					String key 	= getCellAsString( row.getCell(colKey) );
-					String value = getCellAsString( row.getCell(colData) );
+					String key 	= getCellAsString( row.getCell( colKey ) );
+					String value = getCellAsString( row.getCell( colData ) );
 					
 					//System.out.println( key + " -  " + value );
 					

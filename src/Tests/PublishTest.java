@@ -5,11 +5,13 @@ import olxPageObjects.PublishPO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 
 
 import Utilities.FileUtilities;
 import Utilities.RegexUtilities;
+import Utilities.SeleniumHelper;
 
 
 public class PublishTest extends BaseTest 
@@ -23,9 +25,10 @@ public class PublishTest extends BaseTest
 	public void OnTestStart()
 	{
 		super.OnTestStart();
-		articlePath = System.getProperty("user.dir")+"/Articles/Auto1/";
 		
-		String[] data = GetUsrPsw(4);
+		articlePath = System.getProperty("user.dir")+"/Articles/Article01/";
+		
+		String[] data = GetUsrPsw(1);
 		usr = data[0];
 		psw = data[1];
 	}
@@ -34,7 +37,6 @@ public class PublishTest extends BaseTest
 	public void PublishSuccess()
 	{	
 		publishPage = new PublishPO(wd);
-		
 		try
 		{
 			
@@ -42,12 +44,13 @@ public class PublishTest extends BaseTest
 			homePO.Login(usr, psw);
 			//publishPage.SellRnd( );
 			publishPage.Sell(articlePath);
-			 
+
 			//https://www.olx.com.ar/posting/success/856455871?sk=00a58a095cde6064eb0cae4b43f4f58ee
-			 
-			String articleId = RegexUtilities.ApplyRegex(wd.getCurrentUrl(), "\\/([0-9]{1,})");
-			System.out.println( wd.getCurrentUrl() );
-			System.out.println("article id is "+articleId);
+			String articleId = RegexUtilities.ApplyRegex( wd.getCurrentUrl(), "\\/([0-9]{9})" );
+			System.out.println("Article id is "+articleId);
+			
+			//Espera el boton ir a mis avisos
+			SeleniumHelper.Wait5AndClick(wd, By.cssSelector("a.btn-cancel"));
 			
 			FileUtilities.WriteFile("cuentas.txt", usr+"\n"+psw);
 		
