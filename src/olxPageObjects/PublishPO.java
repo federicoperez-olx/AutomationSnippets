@@ -214,7 +214,7 @@ public class PublishPO extends BasePO
 }
 
 /*
- * Categorias de Vender
+ * Categorias de Vender Argentina
 			String Autos = "362";
 			String Propiedades = "16";
 			String Electronica = "800";
