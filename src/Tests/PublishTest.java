@@ -47,7 +47,7 @@ public class PublishTest extends BaseTest
 
 			//https://www.olx.com.ar/posting/success/856455871?sk=00a58a095cde6064eb0cae4b43f4f58ee
 			String articleId = RegexUtilities.ApplyRegex( wd.getCurrentUrl(), "\\/([0-9]{9})" );
-			System.out.println("Article id is "+articleId);
+			System.out.println("Article ID is "+articleId);
 			
 			//Espera el boton ir a mis avisos
 			SeleniumHelper.Wait5AndClick(wd, By.cssSelector("a.btn-cancel"));

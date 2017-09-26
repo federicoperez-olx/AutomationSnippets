@@ -11,8 +11,6 @@ public class RegexUtilities
 	
 	public static String ApplyRegex(String base, String regex)
 	{
-
-		System.out.println( "Regexing..." );
 		return ApplyRegex(base, regex, 1);
 	}
 	

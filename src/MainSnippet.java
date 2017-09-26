@@ -35,6 +35,25 @@ public class MainSnippet
 		Print("Mission Start!");
 
 		//QnD_TestChat();
+		String[] usrs = new String[]
+		{
+				"argentina@olx.com",
+				"uruguay@olx.com",
+				"colombia@olx.com",
+				"ecuador@olx.com",
+				"panama@olx.com",
+				"guatemala@olx.com",
+				"costarica@olx.com",
+				"elsalvador@olx.com"
+	
+		};
+				
+		for (int i = 0; i < usrs.length; i++) 
+		{
+			QnD_Register(usrs[i], "pass");
+			SeleniumHelper.ForceWait(2);
+		}
+		
 		
 		Print("Mission End.");
 	}
@@ -118,7 +137,7 @@ public class MainSnippet
 	
 	static void QnD_Register(String usr, String psw)
 	{
-		WebDriver wd = SeleniumFactory.getChromeTesting();
+		WebDriver wd = SeleniumFactory.getChromeStaging();
 		
 		HomePagePO home = new HomePagePO(wd);
 		
@@ -128,8 +147,8 @@ public class MainSnippet
 			 System.out.println("refresh");
 			
 			 home.Register(usr, psw);
-			 home.Login(usr, psw);
-			 
+			 //home.Login(usr, psw);
+			 wd.quit();
 			FileUtilities.WriteFile("cuentas.txt", usr+"\n"+psw);
 		
 		}catch(NoSuchElementException e)
